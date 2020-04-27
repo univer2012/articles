@@ -1,0 +1,788 @@
+{\rtf1\ansi\ansicpg936\cocoartf1348\cocoasubrtf170
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset134 STHeitiSC-Light;\f2\fnil\fcharset0 HelveticaNeue;
+\f3\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red28\green28\blue28;\red249\green249\blue249;\red170\green13\blue145;
+\red196\green26\blue22;\red92\green38\blue153;\red46\green13\blue110;\red28\green0\blue207;\red0\green116\blue0;
+\red100\green56\blue32;\red63\green110\blue116;\red38\green71\blue75;\red26\green26\blue26;\red67\green67\blue67;
+\red96\green0\blue125;\red246\green246\blue246;\red255\green255\blue255;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid1\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\paperw11900\paperh16840\margl1440\margr1440\vieww12780\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+
+\f0\fs30 \cf0 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \'ce\'d2\'c3\'c7\'d6\'aa\'b5\'c0\'d4\'da
+\f2 Swift
+\f1 \'d6\'d0\'a3\'ac\'bf\'c9\'d2\'d4\'d4\'da
+\f2 NSArray
+\f1 \'d3\'eb
+\f2 Array
+\f1 \'d6\'ae\'bc\'e4\'d7\'f6\'ce\'de\'b7\'ec\'b5\'c4\'d7\'aa\'bb\'bb\'a3\'ac\'c8\'e7\'cf\'c2\'cb\'f9\'ca\'be\'a3\'ba
+\f0\fs32 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+
+\fs30 \cf0 \
+\pard\tx505\pardeftab505\pardirnatural
+
+\f3\fs21 \cf4 \CocoaLigature0 		let\cf0  mobile=[\cf5 "iPhone"\cf0 ,\cf5 "Nokia"\cf0 ,\cf5 "
+\f1 \'d0\'a1\'c3\'d7
+\f3 Note"\cf0 ]\
+        \cf4 let\cf0  mobile1=(mobile \cf4 as\cf0  \cf6 NSArray\cf0 ).\cf7 objectAtIndex\cf0 (\cf8 1\cf0 )\
+        \cf7 print\cf0 (mobile1)\
+        \
+        \cf4 let\cf0  animalArray=\cf6 NSArray\cf0 (objects: \cf5 "lion"\cf0 ,\cf5 "tiger"\cf0 ,\cf5 "monkey"\cf0 )\
+        \cf4 let\cf0  animalCount=(animalArray \cf4 as\cf0  \cf6 Array\cf0 )\
+        \cf7 print\cf0 (animalCount)\
+        \cf9 /* 
+\f1 \cf9 \'ca\'e4\'b3\'f6
+\f3 \cf9  :\
+        Nokia\
+        [lion, tiger, monkey]      */
+\f0\fs30 \cf0 \CocoaLigature1 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \'b1\'e0\'d2\'eb\'c6\'f7\'bb\'e1\'ce\'aa\'c1\'cb\'ce\'d2\'c3\'c7\'cd\'ea\'b3\'c9\'cb\'f9\'d3\'d0\'d7\'aa\'bb\'bb\'a3\'ac\'ce\'d2\'c3\'c7\'d6\'bb\'d0\'e8\'d2\'aa\'c4\'c3\'c0\'b4\'bc\'b4\'d3\'c3\'be\'cd\'d0\'d0\'a1\'a3\'b5\'b1\'c8\'bb\'a3\'ac\'b3\'fd\'c1\'cb\'ca\'fd\'d7\'e9\'cd\'e2\'a3\'ac\'bb\'b9\'d3\'d0\'d7\'d6\'b5\'e4
+\f2 (Dictionary)
+\f1 \'a1\'a2\'bc\'af\'ba\'cf
+\f2 (Set)
+\f1 \'a1\'a2\'d7\'d6\'b7\'fb\'b4\'ae
+\f2 (String)
+\f1 \'d2\'b2\'ca\'c7\'d2\'bb\'d1\'f9\'a1\'a3\
+\pard\pardeftab720\sl288\slmult1
+
+\f0 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1\b \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \'ce\'ca\'cc\'e2
+\f2\b0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1 \cf2 \'b2\'bb\'b9\'fd\'d7\'d0\'cf\'b8\'d2\'bb\'cf\'eb\'a3\'ac\'bb\'e1\'b7\'a2\'cf\'d6\'a3\'ac
+\f2 NSArray
+\f1 \'ca\'c7\'c0\'e0\'c0\'e0\'d0\'cd\'a3\'ac\'b6\'f8
+\f2 Array
+\f1 \'ca\'c7\'bd\'e1\'b9\'b9\'cc\'e5\'c0\'e0\'d0\'cd\'a1\'a3\'d2\'bb\'b8\'f6\'ca\'c7\'d2\'fd\'d3\'c3\'c0\'e0\'d0\'cd\'a3\'ac\'d2\'bb\'b8\'f6\'ca\'c7\'d6\'b5\'c0\'e0\'d0\'cd\'a3\'ac\'cb\'fc\'c3\'c7\'ca\'c7\'d4\'f5\'d1\'f9\'ca\'b5\'cf\'d6\'ce\'de\'b7\'ec\'d7\'aa\'bb\'bb\'b5\'c4\'c4\'d8\'a3\'bf\'d5\'e2\'c8\'c3\'ce\'d2\'c3\'c7\'cf\'eb\'b5\'bd\'c1\'cb
+\f2 Cocoa Foundation
+\f1 \'d3\'eb
+\f2 Core Foundation
+\f1 \'d6\'ae\'bc\'e4\'d7\'aa\'bb\'bb\'b5\'c4
+\f2 toll-free bridging
+\f1 \'bc\'bc\'ca\'f5\'a1\'a3\'c4\'c7
+\f2 NSArray
+\f1 \'d3\'eb
+\f2 Array
+\f1 \'d6\'ae\'bc\'e4\'ca\'c7\'b2\'bb\'ca\'c7\'d2\'b2\'d3\'a6\'b8\'c3\'d3\'d0\'c0\'e0\'cb\'c6\'b5\'c4\'c7\'c5\'bd\'d3\'ca\'b5\'cf\'d6\'c4\'d8\'a3\'bf
+\f2 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+
+\f0 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\pardeftab720\sl288\slmult1
+
+\f2\b \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Objective-C Bridge
+\b0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1 \cf2 \'ce\'d2\'c3\'c7\'bd\'ab\'ca\'f3\'b1\'ea\'d2\'c6\'b6\'af\'b5\'bd
+\f2 Array
+\f1 \'c9\'cf\'a3\'ac\'c8\'bb\'ba\'f3
+\f2 "cmd+
+\f1 \'ca\'f3\'b1\'ea\'b5\'e3\'bb\'f7
+\f2 "
+\f1 \'a3\'ac\'bd\'f8\'c8\'eb\'b5\'bd
+\f2 Swift
+\f1 \'b5\'c4\'c9\'f9\'c3\'f7\'ce\'c4\'bc\'fe\'d6\'d0\'a3\'ac\'d4\'da
+\f2 Array
+\f1 \'b5\'c4\'d7\'a2\'ca\'cd\'d6\'d0\'a3\'ac\'bf\'c9\'d2\'d4\'bf\'b4\'b5\'bd\'cf\'c2\'c3\'e6\'d5\'e2\'b6\'ce\'a3\'ba
+\f2 \
+\pard\tx505\pardeftab505\pardirnatural
+
+\f3\fs21 \cf9 \cb1 \kerning1\expnd0\expndtw0 \CocoaLigature0 \outl0\strokewidth0 	/// Objective-C Bridge\
+\pard\tx505\pardeftab505\pardirnatural
+\cf0     \cf9 /// ==================\
+\cf0     \cf9 ///\
+\cf0     \cf9 /// The main distinction between `Array` and the other array types is\
+\cf0     \cf9 /// that it interoperates seamlessly and efficiently with Objective-C.\
+\cf0     \cf9 ///\
+\cf0     \cf9 /// `Array<Element>` is considered bridged to Objective-C iff `Element`\
+\cf0     \cf9 /// is bridged to Objective-C.\
+\cf0     \cf9 //....
+\f0\fs30 \cf0 \CocoaLigature1 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \'bf\'c9\'d2\'d4\'bf\'b4\'b5\'bd
+\f2 Array
+\f1 \'d3\'eb
+\f2 Objective-C
+\f1 \'b5\'c4\'ca\'fd\'d7\'e9\'d6\'ae\'bc\'e4\'c8\'b7\'ca\'b5\'b4\'e6\'d4\'da\'c4\'b3\'d6\'d6\'c7\'c5\'bd\'d3\'bc\'bc\'ca\'f5\'a3\'ac\'ce\'d2\'c3\'c7\'d4\'dd\'c7\'d2\'b3\'c6\'d6\'ae\'ce\'aa
+\f2 "Objective-C Bridge"
+\f1 \'c7\'c5\'bd\'d3\'a1\'a3\'c4\'c7\'d5\'e2\'d3\'d6\'ca\'c7\'c8\'e7\'ba\'ce\'ca\'b5\'cf\'d6\'b5\'c4\'c4\'d8\'a3\'bf
+\f2 \
+
+\f1 \'ce\'d2\'c3\'c7\'d4\'da\'b5\'b1\'c7\'b0\'ce\'c4\'bc\'fe\'d6\'d0\'cb\'d1\'cb\'f7
+\f2 bridge
+\f1 \'a3\'ac\'bb\'e1\'b7\'a2\'cf\'d6\'d3\'d0\'d5\'e2\'d1\'f9\'d2\'bb\'b8\'f6\'d0\'ad\'d2\'e9\'a3\'ba
+\f2 _ObjectiveCBridgeable
+\f1 \'a1\'a3\'ce\'d2\'c3\'c7\'cf\'c8\'c0\'b4\'bf\'b4\'bf\'b4\'cb\'fc\'b5\'c4\'c9\'f9\'c3\'f7\'a3\'ba
+\f2 \
+\pard\tx505\pardeftab505\pardirnatural
+
+\f3\fs21 \cf9 \cb1 \kerning1\expnd0\expndtw0 \CocoaLigature0 \outl0\strokewidth0 \
+/// A Swift Array or Dictionary of types conforming to\
+/// `_ObjectiveCBridgeable` can be passed to Objective-C as an NSArray or\
+/// NSDictionary, respectively.  The elements of the resulting NSArray\
+/// or NSDictionary will be the result of calling `_bridgeToObjectiveC`\
+/// on each elmeent of the source container.\
+\pard\tx505\pardeftab505\pardirnatural
+\cf4 public\cf0  \cf4 protocol\cf0  _ObjectiveCBridgeable \{\
+\}
+\f0\fs30 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+\cf0 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \'bc\'b4\'d2\'bb\'b8\'f6
+\f2 Swift
+\f1 \'ca\'fd\'d7\'e9\'bb\'f2\'d7\'d6\'b5\'e4\'a3\'ac\'c8\'e7\'b9\'fb\'c6\'e4\'d4\'aa\'cb\'d8\'c0\'e0\'d0\'cd\'ca\'b5\'cf\'d6\'c1\'cb
+\f2 _ObjectiveCBridgeable
+\f1 \'d0\'ad\'d2\'e9\'a3\'ac\'d4\'f2\'b8\'c3\'ca\'fd\'d7\'e9\'bb\'f2\'d7\'d6\'b5\'e4\'bf\'c9\'d2\'d4\'b1\'bb\'d7\'aa\'bb\'bb\'b3\'c9
+\f2 Objective-C
+\f1 \'b5\'c4\'ca\'fd\'d7\'e9\'bb\'f2\'d7\'d6\'b5\'e4\'a1\'a3\'b6\'d4\'d3\'da
+\f2 _ObjectiveCBridgeable
+\f1 \'d0\'ad\'d2\'e9\'a3\'ac\'ce\'d2\'c3\'c7\'c4\'bf\'c7\'b0\'cb\'f9\'c4\'dc\'b5\'c3\'b5\'bd\'b5\'c4\'ce\'c4\'b5\'b5\'be\'cd\'d6\'bb\'d3\'d0\'d5\'e2\'d0\'a9\'a3\'ac\'d2\'b2\'bf\'b4\'b2\'bb\'b5\'bd\'cb\'fc\'c0\'ef\'c3\'e6\'c9\'f9\'c3\'f7\'c1\'cb\'ca\'b2\'c3\'b4\'ca\'f4\'d0\'d4\'b7\'bd\'b7\'a8\'a1\'a3\'b2\'bb\'b9\'fd\'a3\'ac\'bf\'c9\'d2\'d4\'bf\'b4\'b5\'bd\'d5\'e2\'b8\'f6\'d0\'ad\'d2\'e9\'ca\'c7\'b7\'c3\'ce\'ca\'bf\'d8\'d6\'c6\'c8\'a8\'cf\'de\'ca\'c7
+\f2 public
+\f1 \'a3\'ac\'d2\'b2\'be\'cd\'d2\'e2\'ce\'b6\'d7\'c5\'bf\'c9\'d2\'d4\'b6\'a8\'d2\'e5\'c0\'e0\'c0\'b4\'ca\'b5\'cf\'d6\'d5\'e2\'b8\'f6\'bd\'d3\'bf\'da\'a1\'a3\'d5\'e2\'be\'cd\'ba\'c3\'b0\'ec\'c1\'cb\'a3\'ac\'cf\'c2\'c3\'e6\'be\'cd\'c0\'b4\'b3\'a2\'ca\'d4\'ca\'b5\'cf\'d6\'d5\'e2\'d1\'f9\'d2\'bb\'b8\'f6\'d7\'aa\'bb\'bb\'a1\'a3
+\f0 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+\cf0 \
+\pard\pardeftab720\sl288\slmult1
+
+\f2\b \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Objective-C
+\f1 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \'c0\'e0\'d3\'eb
+\f2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 Swift
+\f1 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \'bd\'e1\'b9\'b9\'cc\'e5\'b5\'c4\'bb\'a5\'d7\'aa\'ca\'be\'c0\'fd
+\f2\b0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1 \cf2 \'d4\'da\'b4\'cb\'cf\'c8\'b6\'a8\'d2\'e5\'d2\'bb\'b8\'f6
+\f2 Objective-C
+\f1 \'c0\'e0\'a3\'ac\'c8\'e7\'cf\'c2\'cb\'f9\'ca\'be\'a3\'ba
+\f2 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+
+\f0 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\tx505\pardeftab505\pardirnatural
+
+\f3\fs21 \cf9 \CocoaLigature0 //Mobile.h\cf0 \
+\pard\tx505\pardeftab505\pardirnatural
+\cf10 #import \cf5 <Foundation/Foundation.h>\cf10 \
+\pard\tx505\pardeftab505\pardirnatural
+\cf0 \
+\cf4 @interface\cf0  Mobile : \cf6 NSObject\cf0 \
+\cf4 @property\cf0 (\cf4 nonatomic\cf0 ,\cf4 strong\cf0 )\cf6 NSString\cf0  *brand;\
+\cf4 @property\cf0 (\cf4 nonatomic\cf0 ,\cf4 strong\cf0 )\cf6 NSString\cf0  *system;\
+-(\cf4 instancetype\cf0 )initWithBrand:(\cf6 NSString\cf0  *)brand system:(\cf6 NSString\cf0  *)system;\
+\
+\cf4 @end\
+\
+\pard\tx505\pardeftab505\pardirnatural
+\cf9 //Mobile.m\cf0 \
+\pard\tx505\pardeftab505\pardirnatural
+\cf4 @implementation\cf0  Mobile\
+\
+-(\cf4 instancetype\cf0 )initWithBrand:(\cf6 NSString\cf0  *)brand system:(\cf6 NSString\cf0  *)system \{\
+    \cf4 self\cf0 =[\cf4 super\cf0  \cf7 init\cf0 ];\
+    \cf4 if\cf0  (\cf4 self\cf0 ) \{\
+        \cf11 _brand\cf0 =brand;\
+        \cf11 _system\cf0 =system;\
+    \}\
+    \cf4 return\cf0  \cf4 self\cf0 ;\
+\}
+\f0\fs30 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+\cf0 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \'cd\'ac\'d1\'f9\'a3\'ac\'ce\'d2\'b6\'a8\'d2\'e5\'d2\'bb\'b8\'f6
+\f2 Swift
+\f1 \'bd\'e1\'b9\'b9\'cc\'e5\'a3\'ac\'c8\'e7\'cf\'c2\'cb\'f9\'ca\'be\'a3\'ba
+\f0 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+\cf0 \
+\pard\tx505\pardeftab505\pardirnatural
+
+\f3\fs21 \cf4 \CocoaLigature0 struct\cf0  SwiftMobile \{\
+    \cf4 let\cf0  brand:\cf6 String\cf0 \
+    \cf4 let\cf0  system:\cf6 String\cf0 \
+\}\
+\
+\pard\pardeftab720\sl288\slmult1
+
+\f1\fs30 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \outl0\strokewidth0 \strokec2 \'d2\'aa\'cf\'eb\'ca\'b5\'cf\'d6
+\f2 Mobile
+\f1 \'c0\'e0\'d3\'eb
+\f2 SwiftMobile
+\f1 \'bd\'e1\'b9\'b9\'cc\'e5\'d6\'ae\'bc\'e4\'b5\'c4\'bb\'a5\'d7\'aa\'a3\'ac\'d4\'f2
+\f2 SwiftMobile
+\f1 \'bd\'e1\'b9\'b9\'cc\'e5\'d0\'e8\'d2\'aa\'ca\'b5\'cf\'d6
+\f2 _ObjectiveCBridgeable
+\f1 \'d0\'ad\'d2\'e9\'a3\'ac\'c8\'e7\'cf\'c2\'cb\'f9\'ca\'be\'a3\'ba
+\f0 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+\cf0 \
+\pard\tx505\pardeftab505\pardirnatural
+
+\f3\fs21 \cf4 \CocoaLigature0 extension\cf0  \cf11 SwiftMobile\cf0  :\cf6 _ObjectiveCBridgeable\cf0  \{\
+    \cf4 typealias\cf0  _ObjectiveCType=\cf11 Mobile\cf0 \
+    \cf9 //
+\f1 \cf9 \'c5\'d0\'b6\'cf\'ca\'c7\'b7\'f1\'c4\'dc\'d7\'aa\'bb\'bb\'b3\'c9
+\f3 \cf9  Objective-C 
+\f1 \cf9 \'b6\'d4\'cf\'f3
+\f3 \cf9 \
+\cf0     \cf4 static\cf0  \cf4 func\cf0  _isBridgedToObjectiveC() -> \cf6 Bool\cf0  \{\
+        \cf4 return\cf0  \cf4 true\cf0 \
+    \}\
+    \cf9 //
+\f1 \cf9 \'bb\'f1\'c8\'a1\'d7\'aa\'bb\'bb\'b5\'c4\'c4\'bf\'b1\'ea\'c0\'e0\'d0\'cd
+\f3 \cf9 \
+\cf0     \cf4 static\cf0  \cf4 func\cf0  _getObjectiveCType() -> \cf6 Any\cf0 .Type \{\
+        \cf4 return\cf0  \cf11 _ObjectiveCType\cf0 .\cf4 self\cf0 \
+    \}\
+    \cf9 //
+\f1 \cf9 \'d7\'aa\'bb\'af\'b3\'c9
+\f3 \cf9  Objective-C 
+\f1 \cf9 \'b6\'d4\'cf\'f3
+\f3 \cf9 \
+\cf0     \cf4 func\cf0  _bridgeToObjectiveC() -> \cf11 _ObjectiveCType\cf0  \{\
+        \cf4 return\cf0  \cf11 Mobile\cf0 (brand: \cf11 brand\cf0 , system: \cf11 system\cf0 )\
+    \}\
+    \cf9 //
+\f1 \cf9 \'c7\'bf\'d6\'c6\'bd\'ab
+\f3 \cf9  Objective-C 
+\f1 \cf9 \'b6\'d4\'cf\'f3\'d7\'aa\'bb\'bb\'b3\'c9
+\f3 \cf9 Swift
+\f1 \cf9 \'bd\'e1\'b9\'b9\'cc\'e5\'c0\'e0\'d0\'cd
+\f3 \cf9 \
+\cf0     \cf4 static\cf0  \cf4 func\cf0  _forceBridgeFromObjectiveC(source: \cf11 _ObjectiveCType\cf0 , \cf4 inout\cf0  result: \cf11 SwiftMobile\cf0 ?) \{\
+        result=\cf11 SwiftMobile\cf0 (brand: source.\cf11 brand\cf0 , system: source.\cf11 system\cf0 )\
+    \}\
+    \cf9 //
+\f1 \cf9 \'d3\'d0\'cc\'f5\'bd\'b2\'b5\'d8\'bd\'ab
+\f3 \cf9  Objective-C 
+\f1 \cf9 \'b6\'d4\'cf\'f3\'d7\'aa\'bb\'bb\'b3\'c9
+\f3 \cf9 Swift
+\f1 \cf9 \'bd\'e1\'b9\'b9\'cc\'e5\'c0\'e0\'d0\'cd
+\f3 \cf9 \
+\cf0     \cf4 static\cf0  \cf4 func\cf0  _conditionallyBridgeFromObjectiveC(source: \cf11 _ObjectiveCType\cf0 , \cf4 inout\cf0  result: \cf11 SwiftMobile\cf0 ?) -> \cf6 Bool\cf0  \{\
+        \cf12 _forceBridgeFromObjectiveC\cf0 (source, result: &result)\
+        \cf4 return\cf0  \cf4 true\cf0 \
+    \}\
+\}\
+\
+\pard\pardeftab720\sl288\slmult1
+
+\f1\fs30 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \outl0\strokewidth0 \strokec2 \'bf\'c9\'d2\'d4\'bf\'b4\'b5\'bd
+\f2 SwiftMobile
+\f1 \'bd\'e1\'b9\'b9\'cc\'e5\'d6\'f7\'d2\'aa\'ca\'b5\'cf\'d6\'c1\'cb
+\f3\fs28 \cf6 \cb1 \kerning1\expnd0\expndtw0 \CocoaLigature0 \outl0\strokewidth0 _ObjectiveCBridgeable
+\f1\fs30 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \outl0\strokewidth0 \strokec2 \'bd\'d3\'bf\'da\'b5\'c4
+\f2 5
+\f1 \'b8\'f6\'b7\'bd\'b7\'a8\'a3\'ac\'b4\'d3\'b7\'bd\'b7\'a8\'c3\'fb\'bb\'f9\'b1\'be\'c9\'cf\'be\'cd\'c4\'dc\'d6\'aa\'b5\'c0\'c3\'bf\'b8\'f6\'b7\'bd\'b7\'a8\'b5\'c4\'d3\'c3\'cd\'be\'a1\'a3\'d5\'e2\'c0\'ef\'d0\'e8\'d2\'aa\'d7\'a2\'d2\'e2\'b5\'c4\'ca\'c7\'d4\'da\'b1\'be\'c0\'fd\'d6\'d0\'b5\'c4
+\f3\fs28 \cf0 \cb1 \kerning1\expnd0\expndtw0 \CocoaLigature0 \outl0\strokewidth0 _conditionallyBridgeFromObjectiveC
+\f1\fs30 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \outl0\strokewidth0 \strokec2 \'d6\'bb\'ca\'c7\'bc\'f2\'b5\'a5\'b5\'d8\'b5\'f7\'d3\'c3\'c1\'cb
+\f3\fs28 \cf12 \cb1 \kerning1\expnd0\expndtw0 \CocoaLigature0 \outl0\strokewidth0 _forceBridgeFromObjectiveC
+\f1\fs30 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \outl0\strokewidth0 \strokec2 \'a3\'ac\'c8\'e7\'b9\'fb\'d0\'e8\'d2\'aa\'d6\'b8\'b6\'a8\'cc\'f5\'bc\'fe\'a3\'ac\'d4\'f2\'d0\'e8\'d2\'aa\'b8\'fc\'cf\'ea\'cf\'b8\'b5\'c4\'ca\'b5\'cf\'d6\'a1\'a3
+\f0 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+\cf0 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \'c8\'c3\'ce\'d2\'c3\'c7\'c0\'b4\'b2\'e2\'ca\'d4\'d2\'bb\'cf\'c2\'a3\'ba
+\f0 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+\cf0 \
+\pard\tx505\pardeftab505\pardirnatural
+
+\f3\fs21 \cf4 \CocoaLigature0 		let\cf0  mobile=\cf11 Mobile\cf0 (brand: \cf5 "iPhone"\cf0 , system: \cf5 "iOS 9.0"\cf0 )\
+        \cf4 let\cf0  swiftMobile=mobile \cf4 as\cf0  \cf11 SwiftMobile\cf0 \
+        \cf7 print\cf0 (\cf5 "\cf0 \\\cf5 (\cf0 swiftMobile.\cf11 brand\cf5 ) : \cf0 \\\cf5 (\cf0 swiftMobile.\cf11 system\cf5 )"\cf0 )\
+        \cf4 let\cf0  swiftMobile2=\cf11 SwiftMobile\cf0 (brand: \cf5 "Galaxy Note 3 Lite"\cf0 , system: \cf5 "Android 5.0"\cf0 )\
+        \cf4 let\cf0  mobile2=swiftMobile2 \cf4 as\cf0  \cf11 Mobile\cf0 \
+        \cf7 print\cf0 (\cf5 "\cf0 \\\cf5 (\cf0 mobile2.\cf11 brand\cf5 ) : \cf0 \\\cf5 (\cf0 mobile2.\cf11 system\cf5 )"\cf0 )\
+        \cf9 /* 
+\f1 \cf9 \'ca\'e4\'b3\'f6
+\f3 \cf9  :\
+        iPhone : iOS 9.0\
+        Galaxy Note 3 Lite : Android 5.0        */
+\f0\fs30 \cf0 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+\cf0 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \'bf\'c9\'d2\'d4\'bf\'b4\'b5\'bd\'d6\'bb\'d0\'e8\'d2\'aa\'ca\'b9\'d3\'c3
+\f2 as
+\f1 \'a3\'ac\'be\'cd\'c4\'dc\'ca\'b5\'cf\'d6
+\f2 Mobile
+\f1 \'c0\'e0\'d3\'eb
+\f2 SwiftMobile
+\f1 \'bd\'e1\'b9\'b9\'cc\'e5\'b5\'c4\'ce\'de\'b7\'ec\'d7\'aa\'bb\'bb\'a1\'a3\'ca\'c7\'b2\'bb\'ca\'c7\'ba\'dc\'bc\'f2\'b5\'a5\'a3\'bf\
+
+\f2 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1\b \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \'bc\'af\'ba\'cf\'c0\'e0\'d0\'cd\'b5\'c4\'ce\'de\'b7\'ec\'bb\'a5\'bb\'bb
+\f2\b0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \
+\pard\pardeftab720\sl288\slmult1
+
+\f1 \cf2 \'bb\'d8\'b5\'bd\'ca\'fd\'d7\'e9\'b5\'c4\'d2\'e9\'cc\'e2\'c9\'cf\'c0\'b4\'a1\'a3
+\f2 \
+
+\f1 \'ce\'d2\'c3\'c7\'d6\'aa\'b5\'c0
+\f2 NSArray
+\f1 \'b5\'c4\'d4\'aa\'cb\'d8\'c0\'e0\'d0\'cd\'b1\'d8\'d0\'eb\'ca\'c7\'c0\'e0\'c0\'e0\'d0\'cd\'b5\'c4\'a3\'ac\'cb\'fc\'b2\'bb\'d6\'a7\'b3\'d6\'b4\'e6\'b4\'a2\'bd\'e1\'b9\'b9\'cc\'e5\'a1\'a2\'ca\'fd\'d6\'b5\'b5\'c8\'c0\'e0\'d0\'cd\'a1\'a3\'d2\'f2\'b4\'cb\'a3\'ac
+\f2 Array
+\f1 \'d7\'aa\'bb\'bb\'b3\'c9
+\f2 NSArray
+\f1 \'b5\'c4\'c7\'b0\'cc\'e1\'ca\'c7
+\f2 Array
+\f1 \'b5\'c4\'d4\'aa\'cb\'d8\'c0\'e0\'d0\'cd\'c4\'dc\'b1\'bb
+\f2 NSArray
+\f1 \'cb\'f9\'bd\'d3\'ca\'dc\'a1\'a3\'c8\'e7\'b9\'fb\'b4\'e6\'b4\'a2\'d4\'da
+\f2 Array
+\f1 \'d6\'d0\'b5\'c4\'d4\'aa\'cb\'d8\'b5\'c4\'c0\'e0\'d0\'cd\'ca\'c7\'bd\'e1\'b9\'b9\'cc\'e5\'a3\'ac\'c7\'d2\'b8\'c3\'bd\'e1\'b9\'b9\'cc\'e5\'ca\'b5\'cf\'d6\'c1\'cb
+\f2 _ObjectiveCBridgeable
+\f1 \'bd\'d3\'bf\'da\'a3\'ac\'d4\'f2\'d7\'aa\'bb\'bb\'b3\'c9
+\f2 NSArray
+\f1 \'ca\'b1\'a3\'ac\'b1\'e0\'d2\'eb\'c6\'f7\'bb\'e1\'d7\'d4\'b6\'af\'bd\'ab\'cb\'f9\'d3\'d0\'b5\'c4\'d4\'aa\'cb\'d8\'d7\'aa\'bb\'bb\'b3\'c9\'b6\'d4\'d3\'a6\'b5\'c4\'c0\'e0\'c0\'e0\'d0\'cd\'b6\'d4\'cf\'f3\'a1\'a3\'d2\'d4\'c9\'cf\'c3\'e6\'b5\'c4
+\f2 SwiftMobile
+\f1 \'ce\'aa\'c0\'fd\'a3\'ac\'bf\'b4\'c8\'e7\'cf\'c2\'b4\'fa\'c2\'eb\'a3\'ba
+\f2 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+
+\f0 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\tx505\pardeftab505\pardirnatural
+
+\f3\fs21 \cf4 \CocoaLigature0 		let\cf0  sm1=\cf11 SwiftMobile\cf0 (brand: \cf5 "iPhone"\cf0 , system: \cf5 "iOS 9.0"\cf0 )\
+        \cf4 let\cf0  sm2=\cf11 SwiftMobile\cf0 (brand: \cf5 "Galaxy Note 3"\cf0 , system: \cf5 "Android 5.0"\cf0 )\
+        \cf4 let\cf0  sm3=\cf11 SwiftMobile\cf0 (brand: \cf5 "
+\f1 \'d0\'a1\'c3\'d7
+\f3 "\cf0 , system: \cf5 "Android 4.0"\cf0 )\
+        \cf4 let\cf0  mobiles=[sm1,sm2,sm3]\
+        \cf4 let\cf0  mobileArray=mobiles \cf4 as\cf0  \cf6 NSArray\cf0 \
+        \cf7 print\cf0 (mobileArray)\
+        \cf4 for\cf0  i \cf4 in\cf0  \cf8 0\cf0 ..<mobiles.\cf6 count\cf0  \{\
+            \cf7 print\cf0 (\cf5 "\cf0 \\\cf5 (\cf0 mobileArray.\cf7 objectAtIndex\cf0 (i).brand\cf5 ) : \cf0 \\\cf5 (\cf0 mobileArray.\cf7 objectAtIndex\cf0 (i).system\cf5 )"\cf0 )\
+            \cf9 /* 
+\f1 \cf9 \'ca\'e4\'b3\'f6
+\f3 \cf9  :\
+            (\
+            "<Mobile: 0x7f978ad3ba90>",\
+            "<Mobile: 0x7f978ad3b4a0>",\
+            "<Mobile: 0x7f978ad3b520>"\
+            )\
+            iPhone : iOS 9.0\
+            Galaxy Note 3 : Android 5.0\
+            
+\f1 \cf9 \'d0\'a1\'c3\'d7
+\f3 \cf9  : Android 4.0                */\cf0 \
+        \}
+\f0\fs30 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li227\fi4\pardirnatural
+\cf0 \
+\pard\pardeftab720\sl552
+
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'bf\'c9\'d2\'d4\'bf\'b4\'b5\'bd\'b4\'f2\'d3\'a1
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 mobileArray
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'ca\'fd\'d7\'e9\'ca\'b1\'a3\'ac\'c6\'e4\'d4\'aa\'cb\'d8\'d2\'d1\'be\'ad\'d7\'aa\'bb\'bb\'b3\'c9\'c1\'cb\'c0\'e0
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Mobile
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'b5\'c4\'b6\'d4\'cf\'f3\'a1\'a3\'d2\'bb\'c7\'d0\'b6\'bc\'ca\'c7\'c4\'c7\'c3\'b4\'b5\'c4\'d7\'d4\'c8\'bb\'a1\'a3\'b6\'f8\'c8\'e7\'b9\'fb\'ce\'d2\'c3\'c7\'b5\'c4
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 SwiftMobile
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'b2\'a2\'c3\'bb\'d3\'d0\'ca\'b5\'cf\'d6
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 _ObjectiveCBridgeable
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'bd\'d3\'bf\'da\'a3\'ac\'d4\'f2\'bb\'e1\'b1\'a8\'b1\'e0\'d2\'eb\'c6\'f7\'b4\'ed\'ce\'f3\'a3\'ba
+\f0 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\fs24 \cf0 \
+{{\NeXTGraphic Pasted Graphic.tiff \width14200 \height1500
+}¬}\
+\
+\
+\pard\pardeftab720\sl288\slmult1
+
+\f1\fs30 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'ca\'b5\'bc\'ca\'c9\'cf\'a3\'ac\'cf\'f1
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Bool
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Int
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac 
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 UInt
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Float
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Double
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 CGFloat
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d5\'e2\'d0\'a9\'ca\'fd\'d6\'b5\'c0\'e0\'d0\'cd\'d2\'b2\'ca\'b5\'cf\'d6\'c1\'cb
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 _ObjectiveCBridgeable
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'bd\'d3\'bf\'da\'a1\'a3\'ce\'d2\'c3\'c7\'bf\'c9\'d2\'d4\'b4\'d3\'ce\'c4\'b5\'b5{\field{\*\fldinst{HYPERLINK "https://developer.apple.com/library/prerelease/mac/releasenotes/General/APIDiffsMacOSX10_11/Swift/Swift.html"}}{\fldrslt \cf15 \expnd0\expndtw0\kerning0
+\ul \ulc15 \outl0\strokewidth0 \strokec15 OS X v10.11 API Diffs \'a8\'43 Swift Changes for Swift}}\'d6\'d0\'d5\'d2\'b5\'bd\'d2\'bb\'d0\'a9\'cf\'df\'cb\'f7\'a3\'ba\
+\
+\pard\tx505\pardeftab505\pardirnatural
+
+\f3\fs21 \cf4 \kerning1\expnd0\expndtw0 \CocoaLigature0 \outl0\strokewidth0 extension\cf0  \cf6 Bool\cf0  : \cf6 _ObjectiveCBridgeable\cf0  \{\
+    \cf4 init\cf0 (\cf4 _\cf0  number: \cf6 NSNumber\cf0 )\
+\}\
+\
+\cf4 extension\cf0  \cf6 Int\cf0  : \cf6 _ObjectiveCBridgeable\cf0  \{\
+    \cf4 init\cf0 (\cf4 _\cf0  number: \cf6 NSNumber\cf0 )\
+\}\
+\
+\cf4 extension\cf0  \cf6 Float\cf0  : \cf6 _ObjectiveCBridgeable\cf0  \{\
+    \cf4 init\cf0 (\cf4 _\cf0  number: \cf6 NSNumber\cf0 )\
+\}\
+\
+\pard\tx505\pardeftab505\pardirnatural
+\cf9 // ... Double, UInt ...
+\f1\fs30 \cf13 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \outl0\strokewidth0 \strokec13 \
+\pard\pardeftab720\sl288\slmult1
+\cf13 \
+(\'d7\'a2\'d2\'e2\'a3\'ba\'d5\'fb\'d0\'cd\'c0\'e0\'d0\'cd\'d6\'bb\'d3\'d0
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Int
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d3\'eb
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 UInt
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'ca\'b5\'cf\'d6\'c1\'cb\'bd\'d3\'bf\'da\'a3\'ac\'b6\'f8\'c6\'e4\'cb\'fc\'d6\'ee\'c8\'e7
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Int16
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Uint32
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Int8
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'b5\'c8\'d4\'f2\'c3\'bb\'d3\'d0\'a3\'a9\
+\'cb\'fc\'c3\'c7\'b5\'c4\'c4\'bf\'b1\'ea\'c0\'e0\'d0\'cd\'b6\'bc\'ca\'c7
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSNumber
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'c0\'e0\'d0\'cd\'a3\'ac\'c8\'e7\'cf\'c2\'b4\'fa\'c2\'eb\'cb\'f9\'ca\'be\'a3\'ba\
+\
+\pard\tx505\pardeftab505\pardirnatural
+
+\f3\fs21 \cf4 \kerning1\expnd0\expndtw0 \CocoaLigature0 \outl0\strokewidth0 let\cf0  numbers=[\cf8 1\cf0 ,\cf8 29\cf0 ,\cf8 40\cf0 ]\
+        \cf4 let\cf0  numberArray=(numbers \cf4 as\cf0  \cf6 NSArray\cf0 ).\cf7 objectAtIndex\cf0 (\cf8 2\cf0 )\
+        \cf7 print\cf0 (numberArray.\cf4 dynamicType\cf0 )\
+        \cf9 /* 
+\f1 \cf9 \'ca\'e4\'b3\'f6
+\f3 \cf9  :\
+        __NSCFNumber        */
+\f1\fs30 \cf13 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \outl0\strokewidth0 \strokec13 \
+\pard\pardeftab720\sl288\slmult1
+\cf13 \
+\pard\pardeftab720\sl288\slmult1
+\cf13 \cb16 \'b5\'b1\'c8\'bb\'a3\'ac\'d2\'aa\'cf\'eb\'ca\'b5\'cf\'d6
+\f2 \cf14 \cb17 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Array
+\f1 \cf13 \cb16 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d3\'eb
+\f2 \cf14 \cb17 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSArray
+\f1 \cf13 \cb16 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'ce\'de\'b7\'ec\'c7\'d0\'bb\'bb\'a3\'ac\'b3\'fd\'c1\'cb\'d4\'aa\'cb\'d8\'c0\'e0\'d0\'cd\'d0\'e8\'d2\'aa\'d6\'a7\'b3\'d6\'d5\'e2\'d6\'d6\'b2\'d9\'d7\'f7\'cd\'e2\'a3\'ac
+\f2 \cf14 \cb17 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Array
+\f1 \cf13 \cb16 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'b1\'be\'c9\'ed\'d2\'b2\'d0\'e8\'d2\'aa\'c4\'dc\'d6\'a7\'b3\'d6
+\f2 \cf14 \cb17 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Objective-C Bridge
+\f1 \cf13 \cb16 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac\'bc\'b4\'cb\'fc\'d2\'b2\'d0\'e8\'d2\'aa\'ca\'b5\'cf\'d6
+\f2 \cf14 \cb17 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 _ObjectiveCBridgeable
+\f1 \cf13 \cb16 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'bd\'d3\'bf\'da\'a1\'a3\'d4\'da
+\f2 \cf14 \cb17 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Swift
+\f1 \cf13 \cb16 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'ce\'c4\'bc\'fe\'b5\'c4
+\f2 \cf14 \cb17 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Array
+\f1 \cf13 \cb16 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'c9\'f9\'c3\'f7\'d6\'d0\'b2\'a2\'c3\'bb\'d3\'d0\'d5\'d2\'b5\'bd\'cf\'e0\'b9\'d8\'b5\'c4\'cf\'df\'cb\'f7\'a3\'ba\cb1 \
+\
+\pard\tx505\pardeftab505\pardirnatural
+
+\f3\fs21 \cf4 \kerning1\expnd0\expndtw0 \CocoaLigature0 \outl0\strokewidth0 public\cf0  \cf4 struct\cf0  Array<Element> : \cf6 CollectionType\cf0 , \cf6 MutableCollectionType\cf0 , \cf6 _DestructorSafeContainer\cf0  \{\
+    \cf9 /// Always zero, which is the index of the first element when non-empty.\
+\cf0     \cf4 public\cf0  \cf4 var\cf0  startIndex: \cf6 Int\cf0  \{ get \}\
+    \cf9 /// A "past-the-end" element index; the successor of the last valid\
+\cf0     \cf9 /// subscript argument.\
+\cf0     \cf4 public\cf0  \cf4 var\cf0  endIndex: \cf6 Int\cf0  \{ get \}\
+    \cf4 public\cf0  \cf4 subscript\cf0  (index: \cf6 Int\cf0 ) -> \cf6 Element\cf0 \
+    \cf4 public\cf0  \cf4 subscript\cf0  (subRange: \cf6 Range\cf0 <\cf6 Int\cf0 >) -> \cf6 ArraySlice\cf0 <\cf6 Element\cf0 >\
+\}
+\f1\fs30 \cf13 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \outl0\strokewidth0 \strokec13 \
+\pard\pardeftab720\sl288\slmult1
+\cf13 \
+\'cf\'df\'cb\'f7\'d2\'c0\'c8\'bb\'d4\'da{\field{\*\fldinst{HYPERLINK "https://developer.apple.com/library/prerelease/mac/releasenotes/General/APIDiffsMacOSX10_11/Swift/Swift.html"}}{\fldrslt \cf15 \expnd0\expndtw0\kerning0
+\ul \ulc15 \outl0\strokewidth0 \strokec15 OS X v10.11 API Diffs \'a8\'43 Swift Changes for Swift}}\'d6\'d0\'a3\'ac\'d3\'d0\'c8\'e7\'cf\'c2\'c9\'f9\'c3\'f7\'a3\'ba\
+\
+\pard\tx505\pardeftab505\pardirnatural
+
+\f3\fs21 \cf4 \kerning1\expnd0\expndtw0 \CocoaLigature0 \outl0\strokewidth0 extension\cf0  \cf6 Array\cf0  : \cf6 _ObjectiveCBridgeable\cf0  \{\
+    \cf4 init\cf0 (_fromNSArray source: \cf6 NSArray\cf0 , noCopy noCopy: \cf6 Bool\cf0  = \cf4 default\cf0 )\
+\}\
+\
+\pard\pardeftab720\sl288\slmult1
+
+\f1\fs30 \cf13 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \outl0\strokewidth0 \strokec13 \'d2\'f2\'b4\'cb\'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Array
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d3\'eb
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSArray
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'cf\'e0\'bb\'a5\'d7\'aa\'bb\'bb\'d0\'e8\'d2\'aa\'c1\'bd\'b8\'f6\'cc\'f5\'bc\'fe\'a3\'ba\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl288\slmult1
+\ls1\ilvl0\cf14 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	1.	}
+\f2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Array
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d7\'d4\'c9\'ed\'ca\'b5\'cf\'d6
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Objective-C Bridge
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'c7\'c5\'bd\'d3\'a3\'ac\'d5\'e2\'b8\'f6
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Swift
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d2\'d1\'be\'ad\'b0\'ef\'ce\'d2\'c3\'c7\'ca\'b5\'cf\'d6\'c1\'cb\'a1\'a3\
+\ls1\ilvl0\cf14 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	2.	}
+\f2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Array
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d6\'d0\'b5\'c4\'d4\'aa\'cb\'d8\'c8\'e7\'b9\'fb\'ca\'c7\'ca\'fd\'d6\'b5\'c0\'e0\'d0\'cd\'bb\'f2\'bd\'e1\'b9\'b9\'c0\'e0\'d0\'cd\'a3\'ac\'b1\'d8\'d0\'eb\'ca\'b5\'cf\'d6
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Objective-C Bridge
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'c7\'c5\'bd\'d3\'a1\'a3\'b6\'f8\'c8\'e7\'b9\'fb\'ca\'c7\'c0\'e0\'c0\'e0\'d0\'cd\'bb\'f2\'d5\'df\'ca\'c7
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 @objc protocol
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'c0\'e0\'d0\'cd\'a3\'ac\'d4\'f2\'b2\'bb\'b9\'dc\'d5\'e2\'b8\'f6\'c0\'e0\'d0\'cd\'ca\'c7
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Objective-C
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'cc\'e5\'cf\'b5\'d6\'d0\'b5\'c4\'a3\'ac\'bb\'b9\'ca\'c7\'b4\'bf
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Swift
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'c0\'e0\'d0\'cd(\'b2\'bb\'bc\'cc\'b3\'d0\'d7\'d4
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSObject
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 )\'a3\'ac\'b6\'bc\'bf\'c9\'d2\'d4\'d6\'b1\'bd\'d3\'d7\'aa\'bb\'bb\'a1\'a3\
+\pard\pardeftab720\sl288\slmult1
+\cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \'c1\'ed\'cd\'e2\'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Array
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d6\'bb\'c4\'dc\'d7\'aa\'bb\'bb\'b3\'c9
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSArray
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac\'b6\'f8\'b2\'bb\'c4\'dc\'d7\'aa\'bb\'bb\'b3\'c9
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSArray
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'b5\'c4\'d7\'d3\'c0\'e0\'a3\'ac\'c8\'e7
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSMutableArray
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'bb\'f2
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSOrderedArray
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a1\'a3\'c8\'e7\'cf\'c2\'cb\'f9\'ca\'be\'a3\'ba\
+\pard\tx505\pardeftab505\pardirnatural
+\cf13 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {{\NeXTGraphic Pasted Graphic 1.tiff \width14520 \height840
+}¬}\
+\
+\pard\pardeftab720\sl288\slmult1
+
+\f1\fs30 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'b5\'b1\'c8\'bb\'a3\'ac\'b7\'b4\'b9\'fd\'c0\'b4\'c8\'b4\'ca\'c7\'bf\'c9\'d2\'d4\'b5\'c4\'a1\'a3\'d5\'e2\'b8\'f6\'d3\'a6\'b8\'c3\'b2\'bb\'d0\'e8\'d2\'aa\'cc\'ab\'b6\'e0\'b5\'c4\'cc\'d6\'c2\'db\'a1\'a3\
+\
+\pard\pardeftab720\sl288\slmult1
+
+\b \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \'d0\'a1\'bd\'e1
+\b0 \
+\pard\pardeftab720\sl288\slmult1
+\cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \'d4\'da
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Swift
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d6\'d0\'a3\'ac\'ce\'d2\'c3\'c7\'b8\'fc\'b6\'e0\'b5\'c4\'bb\'e1\'ca\'b9\'d3\'c3
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Array
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Dictionary
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Set
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d5\'e2\'bc\'b8\'b8\'f6\'bc\'af\'ba\'cf\'c0\'e0\'d0\'cd\'c0\'b4\'b4\'e6\'b4\'a2\'ca\'fd\'be\'dd\'a3\'ac\'b5\'b1\'c8\'bb\'d2\'b2\'bb\'e1\'d3\'f6\'b5\'bd\'d0\'e8\'d2\'aa\'bd\'ab\'cb\'fc\'c3\'c7\'d3\'eb
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Objective-C
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d6\'d0\'b6\'d4\'d3\'a6\'b5\'c4\'bc\'af\'ba\'cf\'c0\'e0\'d0\'cd\'d7\'f6\'d7\'aa\'bb\'bb\'b5\'c4\'c7\'e9\'bf\'f6\'a3\'ac\'cc\'d8\'b1\'f0\'ca\'c7\'d4\'da\'bb\'ec\'ba\'cf\'b1\'e0\'b3\'cc\'b5\'c4\'ca\'b1\'ba\'f2\'a1\'a3\'c1\'ed\'cd\'e2\'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 String
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d2\'b2\'ca\'c7\'bf\'c9\'c4\'dc\'be\'ad\'b3\'a3\'c7\'d0\'bb\'bb\'b5\'c4\'d2\'bb\'b8\'f6\'b5\'d8\'b7\'bd\'a1\'a3\'b2\'bb\'b9\'fd\'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Apple
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d2\'d1\'be\'ad\'b0\'ef\'ce\'d2\'c3\'c7\'cd\'ea\'b3\'c9\'c1\'cb\'b4\'f3\'b2\'bf\'b7\'d6\'b5\'c4\'b9\'a4\'d7\'f7\'a1\'a3\'c8\'e7\'b9\'fb\'d0\'e8\'d2\'aa\'ca\'b5\'cf\'d6\'d7\'d4\'b6\'a8\'d2\'e5\'b5\'c4\'bd\'e1\'b9\'b9\'cc\'e5\'c0\'e0\'d0\'cd\'d3\'eb
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Objective-C
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'c0\'e0\'b5\'c4\'c7\'d0\'bb\'bb\'a3\'ac\'d4\'f2\'bf\'c9\'d2\'d4\'c8\'c3\'bd\'e1\'b9\'b9\'cc\'e5\'ca\'b5\'cf\'d6
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 _ObjectiveCBridgeable
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'bd\'d3\'bf\'da\'a1\'a3\
+\'d5\'e2\'c0\'ef\'bb\'b9\'d3\'d0\'b8\'f6\'d0\'a1\'ce\'ca\'cc\'e2\'a3\'ac\'d4\'da
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Objective-C
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d6\'d0\'ca\'b5\'bc\'ca\'c9\'cf\'ca\'c7\'d3\'d0\'c1\'bd\'b8\'f6\'c0\'e0\'bf\'c9\'d2\'d4\'d3\'c3\'c0\'b4\'b0\'fc\'d7\'b0\'ca\'fd\'d6\'b5\'c0\'e0\'d0\'cd\'b5\'c4\'d6\'b5\'a3\'ba
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSNumber
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d3\'eb
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSValue
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a1\'a3
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSNumber
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'ce\'d2\'c3\'c7\'be\'cd\'b2\'bb\'cb\'b5\'c1\'cb\'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSValue
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d3\'c3\'d3\'da\'b0\'fc\'d7\'b0\'d6\'ee\'c8\'e7
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 CGPoint
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 CGSize
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'b5\'c8\'a3\'ac\'b2\'bb\'b9\'fd
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Swift
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'b2\'a2\'c3\'bb\'d3\'d0\'ca\'b5\'cf\'d6
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 CGPoint
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'c0\'e0\'b5\'c4\'d6\'b5\'b5\'bd
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 NSValue
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'b5\'c4\'d7\'aa\'bb\'bb\'a3\'ac\'cb\'f9\'d2\'d4\'d5\'e2\'b8\'f6\'d0\'e8\'d2\'aa\'ce\'d2\'c3\'c7\'d7\'d4\'bc\'ba\'c8\'a5\'b4\'a6\'c0\'ed\'a1\'a3\
+\'d4\'da
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Swift
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'d3\'eb
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 Objective-C
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'b5\'c4\'bc\'af\'ba\'cf\'c0\'e0\'d0\'cd\'cf\'e0\'bb\'a5\'d7\'aa\'bb\'bb\'b9\'fd\'b3\'cc\'d6\'d0\'a3\'ac\'bb\'b9\'c9\'e6\'bc\'b0\'b5\'bd\'d2\'bb\'d0\'a9\'d0\'d4\'c4\'dc\'ce\'ca\'cc\'e2\'a3\'ac\'b4\'f3\'bc\'d2\'bf\'c9\'d2\'d4\'bf\'b4\'bf\'b4\'b6\'d4\'d3\'a6\'b5\'c4\'d7\'a2\'ca\'cd\'cb\'b5\'c3\'f7\'a1\'a3\'d4\'da\'ba\'f3\'d0\'f8\'b5\'c4\'ce\'c4\'d5\'c2\'d6\'d0\'a3\'ac\'bb\'e1\'c9\'e6\'bc\'b0\'b5\'bd\'d5\'e2\'d2\'bb\'d6\'f7\'cc\'e2\'a1\'a3\
+\
+\'b1\'be\'ce\'c4\'b5\'c4\'b2\'bf\'b7\'d6\'ca\'b5\'c0\'fd\'b4\'fa\'c2\'eb\'d2\'d1\'c9\'cf\'b4\'ab\'d6\'c1
+\f2 \cf14 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec14 github
+\f1 \cf13 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec13 \'a3\'ac\'bf\'c9\'d2\'d4\'d4\'da{\field{\*\fldinst{HYPERLINK "https://github.com/southpeak/Swift/tree/master/Basic/ObjectiveCBridgeable"}}{\fldrslt \cf15 \expnd0\expndtw0\kerning0
+\ul \ulc15 \outl0\strokewidth0 \strokec15 \'d5\'e2\'c0\'ef}}\'cf\'c2\'d4\'d8\'a1\'a3\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+\cf13 \
+\pard\pardeftab720\sl288\slmult1
+\cf13 \
+\
+\
+\
+\
+}
