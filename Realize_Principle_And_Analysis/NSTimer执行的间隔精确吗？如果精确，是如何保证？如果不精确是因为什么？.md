@@ -1,0 +1,144 @@
+参考：[浅谈 NSTimer 是否精确？](https://www.jianshu.com/p/9e598abe684e)
+### 分析
+> A timer that fires after a certain time interval has elapsed, sending a specified message to a target object.
+> Timers work in conjunction with run loops. Run loops maintain strong references to their timers, so you don’t have to maintain your own strong reference to a timer after you have added it to a run loop.
+
+`NSTimer` 的启动依赖 `RunLoop`，如果在主线程中做了耗时的操作，当前 `RunLoop` 持续的时间超过了定时器的间隔时间，那么下一次定时就被延后了。
+```
++ (NSTimer *)timerWithTimeInterval:(NSTimeInterval)ti target:(id)aTarget selector:(SEL)aSelector userInfo:(nullable id)userInfo repeats:(BOOL)yesOrNo;
++ (NSTimer *)scheduledTimerWithTimeInterval:(NSTimeInterval)ti target:(id)aTarget selector:(SEL)aSelector userInfo:(nullable id)userInfo repeats:(BOOL)yesOrNo;
+```
+> Creates a timer and schedules it on the current run loop in the default mode.
+
+如果调用的是 `scheduledTimerWith:target:selector:userInfo:repeats`，创建并安排到 RunLoop 的 `default mode` 中。
+
+
+> You must add the new timer to a run loop, using addTimer:forMode:
+
+如果调用的是 `timerWithTimeInterval:target:selector:userInfo:repeats` 就需要手动 add 到 `RunLoop` 的 `Mode` 中。
+
+
+### 验证
+#### 主线程中不做耗时操作
+```
+[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
+
+- (void)countDown {
+    NSLog(@"timer test");
+}
+
+2018-09-15 13:29:19.042045+0800 NSTimer&CADisplayLink[60411:3510935] timer test
+2018-09-15 13:29:20.041936+0800 NSTimer&CADisplayLink[60411:3510935] timer test
+2018-09-15 13:29:21.041975+0800 NSTimer&CADisplayLink[60411:3510935] timer test
+2018-09-15 13:29:22.041915+0800 NSTimer&CADisplayLink[60411:3510935] timer test
+2018-09-15 13:29:23.042830+0800 NSTimer&CADisplayLink[60411:3510935] timer test
+2018-09-15 13:29:24.041953+0800 NSTimer&CADisplayLink[60411:3510935] timer test
+2018-09-15 13:29:25.041902+0800 NSTimer&CADisplayLink[60411:3510935] timer test
+2018-09-15 13:29:26.042256+0800 NSTimer&CADisplayLink[60411:3510935] timer test
+2018-09-15 13:29:27.042001+0800 NSTimer&CADisplayLink[60411:3510935] timer test
+2018-09-15 13:29:28.042379+0800 NSTimer&CADisplayLink[60411:3510935] timer test
+2018-09-15 13:29:29.042492+0800 NSTimer&CADisplayLink[60411:3510935] timer test
+```
+从结果中可以看出，如果在主线程中没有做耗时的操作，其计时偏差基本在1毫秒以内。
+#### 主线程中做耗时操作
+
+```
+[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
+
+- (void)countDown {
+    int count = 0;
+    for (int i = 0; i < 1000000000; i++) {
+        count += i;
+    }
+    NSLog(@"timer test");
+}
+
+2018-09-15 13:34:04.723817+0800 NSTimer&CADisplayLink[60575:3527468] timer test
+2018-09-15 13:34:07.633158+0800 NSTimer&CADisplayLink[60575:3527468] timer test
+2018-09-15 13:34:10.648023+0800 NSTimer&CADisplayLink[60575:3527468] timer test
+2018-09-15 13:34:13.678671+0800 NSTimer&CADisplayLink[60575:3527468] timer test
+```
+从结果中可以看出，如果在主线程中做耗时的操作，其计时偏差已经去到了3秒之多，显然是有问题的。
+
+### 解决方法
+#### 主线程启动定时器
+在主线程中创建 `timer`，把耗时操作放在子线程执行，需要 UI 操作时切换回主线程进行操作。
+
+```
+NSTimer *timer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
+[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+
+- (void)countDown {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        int count = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            count += i;
+        }
+    });
+    NSLog(@"timer test");
+}
+
+2018-09-15 13:55:07.515612+0800 NSTimer&CADisplayLink[60884:3544515] timer test
+2018-09-15 13:55:08.515400+0800 NSTimer&CADisplayLink[60884:3544515] timer test
+2018-09-15 13:55:09.515611+0800 NSTimer&CADisplayLink[60884:3544515] timer test
+2018-09-15 13:55:10.515604+0800 NSTimer&CADisplayLink[60884:3544515] timer test
+2018-09-15 13:55:11.515628+0800 NSTimer&CADisplayLink[60884:3544515] timer test
+2018-09-15 13:55:12.515612+0800 NSTimer&CADisplayLink[60884:3544515] timer test
+2018-09-15 13:55:13.514974+0800 NSTimer&CADisplayLink[60884:3544515] timer test
+```
+
+从结果中可以看出，在主线程中把耗时操作放在子线程执行，需要 UI 操作时切换回主线程进行操作，**其计时偏差基本在1毫秒以内。**
+
+#### 子线程启动定时器
+在子线程中创建 `timer`，在子线程中进行定时任务的操作，需要 UI 操作时切换回主线程进行操作。
+```
+dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
+});
+```
+运行结果中，没有看到任何打印日志。
+
+==在主线程默认启动了 `RunLoop`，可是子线程没有默认的 RunLoop，因此，我们在子线程启动定时器是不生效的。==
+
+```
+dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    [[NSRunLoop currentRunLoop] run];
+});
+
+- (void)countDown {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        int count = 0;
+        for (int i = 0; i < 1000000000; i++) {
+            count += i;
+        }
+    });
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"timer test");
+    });
+}
+
+2018-09-15 13:58:18.471362+0800 NSTimer&CADisplayLink[60938:3548123] timer test
+2018-09-15 13:58:19.471083+0800 NSTimer&CADisplayLink[60938:3548123] timer test
+2018-09-15 13:58:20.471372+0800 NSTimer&CADisplayLink[60938:3548123] timer test
+2018-09-15 13:58:21.471068+0800 NSTimer&CADisplayLink[60938:3548123] timer test
+2018-09-15 13:58:22.471589+0800 NSTimer&CADisplayLink[60938:3548123] timer test
+2018-09-15 13:58:23.471112+0800 NSTimer&CADisplayLink[60938:3548123] timer test
+2018-09-15 13:58:24.470897+0800 NSTimer&CADisplayLink[60938:3548123] timer test
+2018-09-15 13:58:25.470970+0800 NSTimer&CADisplayLink[60938:3548123] timer test
+2018-09-15 13:58:26.471093+0800 NSTimer&CADisplayLink[60938:3548123] timer test
+2018-09-15 13:58:27.470769+0800 NSTimer&CADisplayLink[60938:3548123] timer test
+2018-09-15 13:58:28.469423+0800 NSTimer&CADisplayLink[60938:3548123] timer test
+2018-09-15 13:58:29.471586+0800 NSTimer&CADisplayLink[60938:3548123] timer test
+```
+
+从结果中可以看出，在子线程中启动定时器，把耗时操作放在子线程执行，需要 UI 操作时切换回主线程进行操作，**其计时偏差基本在1毫秒以内。**
+
+
+## 总结
+[`NSRunLoop` 的问题请查看这里](https://blog.ibireme.com/2015/05/18/runloop/)
+
+从结果看，`NSTimer` 在其使用场景下足够准了，其计时偏差基本在1毫秒以内也在容忍范围之内，如果想使用更精确的定时器，可以使用 `CADisplayLink` 或者 `GCD` 的 `Timer`。
+
