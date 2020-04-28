@@ -1,4 +1,17 @@
+#### 问：定义了一个block，它在内存的那一块？
+
+答：
+
+block没有引用外部变量，MRC和ARC模式下，是`__NSGlobalBlock__`。
+
+block有引用外部变量，在MRC下是`__NSStackBlock__`，在ARC下是`__NSMallocBlock__`。
+
+---
+
+
+
 # 1 Block基础和retain cycle(循环引用)
+
 ### 1.1 blcok简介
 
 Block 是从c语言的扩展来的，并不是什么高新技术，和swift语言的闭包需要注意的是由于 Objective-C在iOS中不支持GC机制。
