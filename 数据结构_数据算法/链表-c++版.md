@@ -1,7 +1,7 @@
 ## 单链表
 
 1.`LinkList.h`
-```
+```c++
 template <class T>
 struct Node {
     T data;
@@ -28,7 +28,7 @@ private:
 
 
 2.`LinkList.cpp`
-```
+```c++
 #include <iostream>
 using namespace std;
 
@@ -229,7 +229,7 @@ void LinkList<T>::PrintList() {
 
 
 ## 双链表
-```
+```c++
 /*
  编写一个完整的程序，实现双向循环链表的基本操作
  （1）利用尾插法建立一个双向循环链表。

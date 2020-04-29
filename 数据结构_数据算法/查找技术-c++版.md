@@ -18,7 +18,7 @@
 ### 1.单链表的顺序查找
 
 1.`LinkSearch.h`
-```
+```c++
 #ifndef ____________LinkSearch__
 #define ____________LinkSearch__
 
@@ -42,7 +42,7 @@ private:
 #endif /* defined(____________LinkSearch__) */
 ```
 2.`LinkSearch.cpp`
-```
+```c++
 //LinkSearch.cpp
 #include "LinkSearch.h"
 #include <iostream>
@@ -123,7 +123,7 @@ Node* LinkSearch::GetFirst()
 ```
 
 ### 2.顺序表的顺序查找
-```
+```c++
 int SeqSearch1(int r[], int n, int k)
 {
     r[0]=k ;          //设置哨兵
@@ -139,7 +139,7 @@ int SeqSearch1(int r[], int n, int k)
 ```
 
 ### 3.折半查找递归
-```
+```c++
 int BinSearch2(int r[], int low, int high, int k,int count)
 {
     if (low>high){

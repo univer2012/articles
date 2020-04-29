@@ -6,21 +6,21 @@
 
 ### private
 
- private所修饰的属性或者方法只能在当前类里访问
+ private**所修饰的属性或方法只能在当前类里访问**
 
- private所修饰类只能在当前.swift文件里访问
+ private**所修饰的类只能在当前.swift文件里访问**
 
 
 
 ### fileprivate 
 
-fileprivate访问级别所修饰的属性或者方法在当前的Swift源文件里可以访问。
+fileprivate访问级别：**所修饰的属性或方法，可在当前的Swift源文件里可以访问。**
 
 ###  internal（默认访问级别，internal修饰符可写可不写）
 
-internal访问级别所修饰的属性或方法，在源代码所在的整个模块都可以访问、被继承、被重写
+internal访问级别**所修饰的属性或方法，在源代码所在的整个模块都可以访问、被继承、被重写。**
 
-如果是框架或者库代码，则在整个框架内部都可以访问，框架由外部代码所引用时，则不可以访问。即使使用import，也会提示错误：
+**如果是框架或者库代码，则在整个框架内部都可以访问。框架被外部代码使用时，则不可以访问。**即使使用import，也会提示错误：
 
 > No such module '...'
 
@@ -34,7 +34,7 @@ internal访问级别所修饰的属性或方法，在源代码所在的整个模
 
 # open
 
-可以被任何类使用，包括override和继承。
+**可以被任何类使用，包括override和继承。**
 
 访问权限排序从高到低排序：open>public>interal > fileprivate >private
 
@@ -58,13 +58,7 @@ internal访问级别所修饰的属性或方法，在源代码所在的整个模
 
 ## 2.throws和rethrows的用法与作用，try?和try!是什么意思
 
-来自：
-
-1.[Swift中一些常见的关键字一(inout,defer,throw等)](https://www.jianshu.com/p/0b43a0b5bfd6) 
-
-2.[Swift学习记录 -- Swift中throws处理方式](https://www.jianshu.com/p/d407ae190569)
-
-
+#### 一、throws
 
 throws的使用很简单，只需要<u>在可能出现异常的函数或者方法后面添加throws。经过这个关键字修饰的函数，在调用的时候，需要程序员加上do-catch来调用。</u>
 
@@ -72,9 +66,9 @@ throws的使用很简单，只需要<u>在可能出现异常的函数或者方�
 
 
 
-用法：在可能出现异常的函数或者方法后面添加throws。经过这个关键字修饰的函数，在调用的时候，需要程序员加上do-catch来调用。
+**用法**：在可能出现异常的函数或者方法后面添加throws。经过这个关键字修饰的函数，需要程序员加上`do-catch`来调用。
 
-作用：错误被throw携带出来了，以后的维护和优化不需要重新做错误处理的设计，直接加上错误处理的逻辑即可。保证以后的调用者必然需要对相应的错误进行处理，
+**作用**：错误被throws携带出来了，以后的维护和优化<u>不需要重新做</u>错误处理的设计，直接加上<u>错误处理的逻辑</u>即可。保证以后的调用者必需对相应的错误进行处理。
 
 代码如下：
 
@@ -118,11 +112,11 @@ do {
 
 
 
+#### 二、rethrows
 
+rethrows是异常往上传递的关键字。<u>rethrows针对的不是函数或者方法的本身，而是它携带的闭包类型的参数。当它的闭包类型的参数throws的时候，我们要使用rethrows继续将这个异常往上传递， 直到被调用者使用到</u>。这相比throws多一个传递的环节。
 
-rethrows是异常往上传递的关键字。<u>rethrows针对的不是函数或者方法的本身，而是它携带的闭包类型的参数，当它的闭包类型的参数throws的时候，我们要使用rethrows继续将这个异常往上传递， 直到被调用者使用到</u>。这相比throws多一个传递的环节。
-
-用法：rethrows针对的不是函数或者方法的本身，而是它携带的闭包类型的参数，当它的闭包类型的参数throws的时候，我们要使用rethrows继续将这个异常往上传递， 直到被调用者使用到。
+**用法**：`rethrows`是异常往上传递的关键字。rethrows针对的不是函数或者方法的本身，而是<u>它携带的闭包类型的参数</u>。当<u>它的闭包类型的参数</u>throws的时候，我们要使用`rethrows`继续将这个异常往上传递， 直到被调用者使用到。
 
 ```swift
 func willRethrow(_ throwCall: (Int) throws -> String) rethrows
@@ -130,7 +124,7 @@ func willRethrow(_ throwCall: (Int) throws -> String) rethrows
 
 
 
-作用：使用rethrows继续将这个异常往上传递， 直到被调用者使用到。
+**作用**：使用rethrows继续将这个异常往上传递， 直到被调用者使用到。
 
 代码如下：
 
@@ -187,7 +181,7 @@ do {
 
 
 
-`try`:  程序员手动捕捉异常
+`try`:    "踹"，程序员手动捕捉异常
 
 ```swift
 // try方式
@@ -201,7 +195,7 @@ do {
 
 
 
-`try?`方式:  系统帮助我们处理异常 ,如果该方法出现了异常, 则方法返回nil ,如果没有异常,则返回对应的对象
+`try?`方式:   “疑问踹”， 系统帮助我们处理异常 。如果该方法出现了异常，则方法返回nil 。如果没有异常，则返回相应的对象。
 
 ```swift
 //安全校验
@@ -210,7 +204,7 @@ guard let htmlCont = try? String.init(contentsOfFile: htmlPate!, encoding: Strin
 }
 ```
 
-`try!`方式：  直接告诉系统,该方法没有异常,如果该方法出现了错误,直接崩溃
+`try!`方式： “强踹”，直接告诉系统，该方法没有异常。如果该方法出现了异常，直接崩溃。
 
 ```swift
 let htmlCont = try! String.init(contentsOfFile: htmlPate!, encoding: String.Encoding.utf8)
@@ -218,13 +212,19 @@ let htmlCont = try! String.init(contentsOfFile: htmlPate!, encoding: String.Enco
 
 
 
+来自：
 
+1.[Swift中一些常见的关键字一(inout,defer,throw等)](https://www.jianshu.com/p/0b43a0b5bfd6) 
+
+2.[Swift学习记录 -- Swift中throws处理方式](https://www.jianshu.com/p/d407ae190569)
+
+---
 
 ## 3.Self的使用场景，associatetype的作用
 
 来自：[swift 中 Self 与self](https://www.jianshu.com/p/a6bcdebd83f5)
 
-在定义协议的时候Self 用的频率很高，比如rx。`Self` 不仅指代的是 实现该协议的类型本身，也包括了这个类型的子类。
+**在定义协议的时候，`Self` 使用的频率很高，比如rx。`Self` 不仅指代的是 实现该协议的类型本身，也包括了这个类型的子类。**
 
 示例1：
 
@@ -263,7 +263,7 @@ class MMyClass: Copyable {
 
 
 
-关联类型为协议中的某个类型提供了一个占位名（或者说别名），其代表的实际类型在协议被采纳时才会被指定。你可以通过 `associatedtype` 关键字来指定关联类型。比如使用协议声明更新cell的方法：
+`associatedtype`：**关联类型为协议中的某个类型提供了一个占位名（或者说别名），其代表的实际类型<u>在协议被采纳时</u>才会被指定。你可以<u>通过 `associatedtype` 关键字</u>来指定关联类型。**比如使用协议声明更新cell的方法：
 
 ```swift
 //模型
@@ -297,7 +297,7 @@ class MyTableViewCell: UITableViewCell, TableViewCell {
 
 
 
-1. `map`:map方法作用是把数组[T]通过闭包函数把每一个数组中的元素变成U类型的值，最后组成数组[U]。定义如下：
+1. `map`:map方法作用是**把数组[T]，<u>通过闭包函数</u>把<u>每一个数组中的元素</u>变成<u>U类型的值</u>，最后组成数组[U]**。定义如下：
 
    `func map(transform: (T) -> U) -> [U]`
 
@@ -307,7 +307,7 @@ class MyTableViewCell: UITableViewCell, TableViewCell {
 
    
 
-2. `filter`就是筛选的功能，参数是一个用来判断是否筛除的筛选闭包，根据闭包函数返回的Bool值来过滤值。为True则加入到结果数组中。定义如下：
+2. `filter`**就是筛选的功能，参数是一个<u>用来判断是否筛除的</u>筛选闭包。<u>根据闭包函数返回的Bool值</u>来过滤值，为True则加入到结果数组中**。定义如下：
     `func filter(includeElement: (T) -> Bool) -> [T]`
 
    ```swift
@@ -316,7 +316,7 @@ class MyTableViewCell: UITableViewCell, TableViewCell {
 
    
 
-3. `reduce`的作用给定一个类型为U的初始值，把数组[T]中每一个元素传入到combine的闭包函数里面，通过计算得到最终类型为U的结果值。定义如下：
+3. `reduce`的作用**给定<u>一个类型为U的初始值</u>，把数组[T]中每一个元素传入到<u>combine的闭包函数里面</u>，通过计算得到最终类型为U的结果值**。定义如下：
     `func reduce(initial: U, combine: (U, T) -> U) -> U`
 
    ```swift
@@ -327,7 +327,7 @@ class MyTableViewCell: UITableViewCell, TableViewCell {
 
 **map与flatmap的区别**:
 
-本质上，相比 `map`，`flatMap`也就是在可选值层做了一个解包。
+本质上，**相比 `map`，`flatMap`在可选值层做了一个解包。**
 
 ```swift
 var value: String? = "1"
@@ -345,7 +345,7 @@ print(result)
 ///Optional(1)
 ```
 
-使用flatMap就可以在链式调用时，不用做额外的解包工作：
+**使用flatMap就可以在链式调用时，不用做额外的解包工作**：
 
 ```swift
 var value: String? = "1"
@@ -385,16 +385,19 @@ print(flattenResults)
 
 来自：[iOS面试题01-多线程网络（★★★）](https://www.jianshu.com/p/3f6108b28598)
 
-1>GCD是纯C语言的API，NSOperationQueue是基于GCD的OC版本封装
- 2>GCD只支持FIFO的队列，NSOperationQueue可以很方便地调整执行顺
- 序、设置最大并发数量
- 3>NSOperationQueue可以在轻松在Operation间设置依赖关系，而GCD
- 需要写很多的代码才能实现
- 4>NSOperationQueue支持KVO，可以监测operation是否正在执行
- （isExecuted）、是否结束（isFinished），是否取消（isCanceld）
- 5>GCD的执行速度比NSOperationQueue快
- 任务之间不太互相依赖：GCD
- 任务之间有依赖\或者要监听任务的执行情况：NSOperationQueue
+1. GCD是纯C语言的API，`NSOperationQueue`是基于GCD的OC版本封装
+
+2. GCD只支持FIFO的队列，`NSOperationQueue`可以很方便地调整执行顺序、设置最大并发数量
+
+3. `NSOperationQueue`可以轻松在Operation间设置依赖关系，而GCD需要写很多的代码才能实现
+
+4. `NSOperationQueue`支持KVO，可以监测operation是否正在执行（isExecuted）、是否结束（isFinished），是否取消（isCanceld） 
+
+5. GCD的执行速度比`NSOperationQueue`快
+
+    任务之间不互相依赖：使用GCD
+
+    任务之间有依赖，或者要监听任务的执行情况：使用`NSOperationQueue`
 
 
 
