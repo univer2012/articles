@@ -8,7 +8,7 @@
  一个UIViewController中的所有view之间的关系其实可以看成一颗树，UIViewController的view变量是这颗树的根节点，其它的view都是根节点的直接或间接子节点。
 
 所以我们可以通过 view 的 superview 属性，一直找到根节点。需要注意的是，在代码中，我们还需要考虑各种非法输入，如果输入了 nil，则也需要处理，避免异常。以下是找到指定 view 到根 view 的路径代码：
-```
+```objc
 + (NSArray *)superViews:(UIView *)view {
     if (view == nil) {
         return @[];
@@ -25,7 +25,7 @@
  然后对于两个 view A 和 view B，我们可以得到两个路径，而本题中我们要找的是这里面最近的一个公共节点。
 
 一个简单直接的办法：拿第一个路径中的所有节点，去第二个节点中查找。假设路径的平均长度是 N，因为每个节点都要找 N 次，一共有 N 个节点，所以这个办法的时间复杂度是 O（N^2）。
-```
+```objc
 + (UIView *)commonView_1:(UIView *)viewA andView:(UIView *)viewB {
     NSArray *arr1 = [self superViews:viewA];
     NSArray *arr2 = [self superViews:viewB];
@@ -41,7 +41,7 @@
 }
 ```
 一个改进的办法：我们将一个路径中的所有点先放进 NSSet 中。因为 NSSet 的内部实现是一个 hash 表，所以查找元素的时间复杂度变成了 O（1），我们一共有 N 个节点，所以总时间复杂度优化到了 O（N）。
-```
+```objc
 + (UIView *)commonView_2:(UIView *)viewA andView:(UIView *)viewB {
     NSArray *arr1 = [self superViews:viewA];
     NSArray *arr2 = [self superViews:viewB];
@@ -57,7 +57,7 @@
 ```
 
 除了使用 NSSet 外，我们还可以使用类似归并排序的思想，用两个「指针」，分别指向两个路径的根节点，然后从根节点开始，找第一个不同的节点，第一个不同节点的上一个公共节点，就是我们的答案。代码如下：
-```
+```objc
 /* O(N) Solution */
 + (UIView *)commonView_3:(UIView *)viewA andView:(UIView *)viewB {
     NSArray *arr1 = [self superViews:viewA];
@@ -76,7 +76,7 @@
 }
 ```
 我们还可以使用 UIView 的 `isDescendant` 方法来简化我们的代码，不过这样写的话，时间复杂度应该也是 O(N^2) 的。lexrus 提供了如下的 Swift 版本的代码：
-```
+```swift
 /// without flatMap
 extension UIView {    
 func commonSuperview(of view: UIView) -> UIView? {        
@@ -92,7 +92,7 @@ func commonSuperview(of view: UIView) -> UIView? {
 }
 ```
 特别地，如果我们利用 Optinal 的 flatMap 方法，可以将上面的代码简化得更短，基本上算是一行代码搞定。怎么样，你学会了吗？
-```
+```swift
 extension UIView {
     func commonSuperview(of view: UIView) -> UIView? {
         return superview.flatMap { 
@@ -105,7 +105,7 @@ extension UIView {
 
 ## iOS 面试题（二）什么时候在 block 中不需要使用 weakSelf
 > 问题:我们知道，在使用 block 的时候，为了避免产生循环引用，通常需要使用 weakSelf 与 strongSelf，写下面这样的代码：
-```
+```objc
 __weak typeof(self) weakSelf = self;
 [self doSomeBlockJob:^{
     __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -116,10 +116,9 @@ __weak typeof(self) weakSelf = self;
 ```
 > 那么请问：什么时候在 block里面用self，不需要使用weakself?
 
+**当block本身不被self 持有，而被别的对象持有，同时不产生循环引用的时候，就不需要使用weakself了**。最常见的代码就是UIView的动画代码，我们在使用`UIView animateWithDuration:animations:`方法 做动画的时候，并不需要使用weakself，因为引用持有关系是：
 
-当block本身不被self 持有，而被别的对象持有，同时不产生循环引用的时候，就不需要使用weakself了。最常见的代码就是UIView的动画代码，我们在使用`UIView animateWithDuration:animations:`方法 做动画的时候，并不需要使用weakself，因为引用持有关系是：
-
-> UIView 的某个负责动画的对象持有block，block 持有了self因为 self 并不持有 block，所以就没有循环引用产生，因为就不需要使用 weak self 了。
+> **UIView 的某个负责动画的对象持有block，block 持有了self。因为 self 并不持有 block，所以就没有循环引用产生，所以不需要使用 weak self 了。**
 ```
 [UIView animateWithDuration:0.2 animations:^{
     self.alpha = 1;
@@ -203,8 +202,8 @@ AFNetworkReachabilityStatusBlock callback = ^(AFNetworkReachabilityStatus status
 《Objective-C高级编程》一书中也介绍了相关的内容。
 简单来说，**系统有一个全局的 CFMutableDictionary 实例，来保存每个对象的 weak 指针列表，因为每个对象可能有多个 weak 指针，所以这个实例的值是 CFMutableSet 类型。**
 
-剩下我们要做的，就是在引用计数变成 0 的时候，去这个全局的字典里面，找到所有的 weak 指针，将其值设置成 nil。如何做到这一点呢？[Friday QA](https://mikeash.com/pyblog/friday-qa-2010-07-16-zeroing-weak-references-in-objective-c.html) 上介绍了一种类似 KVO 实现的方式。当对象存在 weak 指针时，我们可以将这个实例指向一个新创建的子类，然后修改这个子类的 release 方法，在 release 方法中，去从全局的 CFMutableDictionary 字典中找到所有的 weak 对象，并且设置成 nil。我摘抄了 Friday QA 上的实现的核心代码，如下：
-```
+剩下我们要做的，就是**在引用计数变成 0 的时候，去这个全局的字典里面，找到所有的 weak 指针，将其值设置成 nil**。如何做到这一点呢？[Friday QA](https://mikeash.com/pyblog/friday-qa-2010-07-16-zeroing-weak-references-in-objective-c.html) 上介绍了一种类似 <u>KVO 实现的方式</u>。**当对象存在 weak 指针时，我们可以将这个实例指向一个新创建的子类，然后修改这个子类的 release 方法，在 release 方法中，去从全局的 CFMutableDictionary 字典中找到所有的 weak 对象，并且设置成 nil。**我摘抄了 Friday QA 上的实现的核心代码，如下：
+```objc
     Class subclass = objc_allocateClassPair(class, newNameC, 0);
     Method release = class_getInstanceMethod(class, @selector(release));
     Method dealloc = class_getInstanceMethod(class, @selector(dealloc));
@@ -231,19 +230,21 @@ AFNetworkReachabilityStatusBlock callback = ^(AFNetworkReachabilityStatus status
 ```
 
 这个理解是错误的，Storyboard 拖出来的控件即使是 strong 的，也不会有循环引用问题。
-我认为 UI 控件用默认用 weak，根源还是苹果希望只有这些 UI 控件的父 View 来强引用它们，而 ViewController 只需要强引用 ViewController.view 成员，则可以间接持有所有的 UI 控件。这样有一个好处是：在以前，当系统收到 Memory Warning 时，会触发 ViewController 的 viewDidUnload 方法，这样的弱引用方式，可以让整个 view 整体都得到释放，也更方便重建时整体重新构造。
+Storyboard 拖出来的**UI 控件默认用 weak，根源还是苹果希望只有这些 UI 控件的父 View 来强引用它们。而 ViewController 只需要强引用 ViewController.view 成员，就可以间接持有所有的 UI 控件**。<font color=#FF0000>这样有一个好处是：在以前，当系统收到 Memory Warning 时，会触发 ViewController 的`viewDidUnload` 方法。这样的弱引用方式，可以让整个 view 整体都得到释放，也更方便重建时整体重新构造。</font>
 
-但是首先 viewDidUnload 方法在 iOS 6 开始就被废弃掉了，苹果用了更简单有效地方式来解决内存警告时的视图资源释放，具体如何做的呢？嗯，这个可以当作某一期的面试题展开介绍。总之就是，**除非你特殊地操作 view 成员，ViewController.view 的生命期和 ViewController 是一样的了。**
+但是首先 viewDidUnload 方法在 iOS 6 开始就被废弃掉了，苹果用了更简单有效地方式来解决内存警告时的视图资源释放，具体如何做的呢？嗯，这个可以当作某一期的面试题展开介绍。总之就是，**除非你特殊地操作 view 成员，否则ViewController.view 的生命期和 ViewController 是一样的。**
 
-所以在这种情况下，其实 UI 控件是不是 weak 其实关系并不大。当 UI 控件是 weak 时，它的引用计数是 1，持有它的是它的 superview，当 UI 控件是 strong 时，它的引用计数是 2，持有它的有两个地方，一个是它的 superview，另一个是这个 strong 的指针。UI 控件并不会持有别的对象，所以，不管是手写代码还是 Storyboard，UI 控件是 strong 都不会有循环引用的。
+**在这种情况下， UI 控件是不是 weak 其实关系并不大。当 UI 控件是 weak 时，它的引用计数是 1，持有它的是它的 superview。当 UI 控件是 strong 时，它的引用计数是 2，持有它的有两个地方，一个是它的 superview，另一个是这个 strong 指针。所以，不管是手写代码还是 Storyboard，UI 控件是 strong 都不会有循环引用。**
 
-那么回到我们的最初的问题，自己写的 view 成员，应该用 weak 还是 strong？**我个人觉得应该用 strong，因为用 weak 并没有什么特别的优势，加上上一篇面试题文章中，我们还看到，其实 weak 变量会有额外的系统维护开销的，如果你没有使用它的特别的理由，那么用 strong 的话应该更好。**
+那么回到我们的最初的问题，<font color=#FF0000>自己写的 view 成员，应该用 weak 还是 strong？</font>**我个人觉得应该用 strong，因为用 weak 并没有什么特别的优势**，加上上一篇面试题文章中，我们还看到，**其实 weak 变量会有额外的系统维护开销的。如果你没有使用它的特别理由，那么用 strong 的话应该更好。**
 
 另外有读者也提到，**如果你要做 Lazy 加载，那么你也只能选择用 strong。**
-当然，如果你非要用 weak，其实也没什么问题，只需要注意在赋值前，先把这个对象用 addSubView 加到父 view 上，否则可能刚刚创建完，它就被释放了。
+
+<font color=#038103>当然，如果你非要用 weak，其实也没什么问题。只需要注意在赋值前，先把这个对象用 addSubView 加到父 view 上，否则可能刚刚创建完，它就被释放了。</font>
+
 在我心目中，这才是我喜欢的面试题，没有标准答案，每种方案各有各的特点，面试者能够足够分清楚每种方案的优缺点，结合具体的场景做选择，这才是优秀的面试者。
 
-> 1.懒加载的对象必须用strong的原因在于，如果使用weak，对象没有并没有被强引用，过了懒加载对象就会被释放掉。
+> 1.懒加载的对象必须用strong的原因在于，如果使用weak，对象并没有被强引用，过了懒加载对象就会被释放掉。
 
 ## iOS 面试题（七）：为什么 Objective-C 的方法调用要用方括号?
 

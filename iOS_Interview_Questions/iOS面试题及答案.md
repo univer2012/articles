@@ -43,7 +43,7 @@ bounds指的是：该view在本身坐标系统中的位置和大小。(参照点
 
 “属性” (property)作为 Objective-C 的一项特性，主要的作用就在于封装对象中的数据。 Objective-C 对象通常会把其所需要的数据保存为各种实例变量。实例变量一般通过“存取方法”(access method)来访问。其中，“获取方法” (getter)用于读取变量值，而“设置方法” (setter)用于写入变量值。
 
-7、@property中有哪些属性关键字？/ @property 后面可以有哪些修饰符？
+#### 7、@property中有哪些属性关键字？/ @property 后面可以有哪些修饰符？
 属性可以拥有的特质分为四类:
 1.原子性--- nonatomic 特质
 2.读/写权限---readwrite(读写)、readonly (只读)
@@ -51,7 +51,9 @@ bounds指的是：该view在本身坐标系统中的位置和大小。(参照点
 4.方法名---getter=<name> 、setter=<name>
 5.不常用的：nonnull,null_resettable,nullable
 
-8、属性关键字 readwrite，readonly，assign，retain，copy，nonatomic 各是什么作用，在那种情况下用？
+
+
+#### 8、属性关键字 readwrite，readonly，assign，retain，copy，nonatomic 各是什么作用，在那种情况下用？
 答：
 1). readwrite 是可读可写特性。需要生成getter方法和setter方法。
 2). readonly 是只读特性。只会生成getter方法，不会生成setter方法，不希望属性在类外改变。
@@ -60,7 +62,9 @@ bounds指的是：该view在本身坐标系统中的位置和大小。(参照点
 5). copy 表示拷贝特性。setter方法将传入对象复制一份，需要完全一份新的变量时。
 6). nonatomic 非原子操作。决定编译器生成的setter和getter方法是否是原子操作，atomic表示多线程安全，一般使用nonatomic，效率高。
 
-9、什么情况使用 weak 关键字，相比 assign 有什么不同？
+
+
+#### 9、什么情况使用 weak 关键字，相比 assign 有什么不同？
 1.在 ARC 中,在有可能出现循环引用的时候,往往要通过让其中一端使用 weak 来解决,比如: delegate 代理属性。
 2.自身已经对它进行一次强引用,没有必要再强引用一次,此时也会使用 weak,自定义 IBOutlet 控件属性一般也使用 weak；当然，也可以使用strong。
 

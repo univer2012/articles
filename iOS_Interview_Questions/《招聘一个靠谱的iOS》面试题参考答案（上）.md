@@ -7,18 +7,17 @@
 什么情况使用 weak 关键字？
 
 
-1. 在 ARC 中,在有可能出现循环引用的时候,往往要通过让其中一端使用 weak 来解决,比如: delegate 代理属性
+1. 在 ARC 中，在有可能出现循环引用的地方，往往要通过让其中一端使用 weak 来解决，比如: delegate 代理属性。
 
-2. 自身已经对它进行一次强引用,没有必要再强引用一次,此时也会使用 weak,自定义 IBOutlet 控件属性一般也使用 weak；当然，也可以使用strong。在下文也有论述：***《IBOutlet连出来的视图属性为什么可以被设置成weak?》***
+2. 自身已经对它进行一次强引用，没有必要再强引用一次，此时也会使用 weak。自定义 IBOutlet 控件属性一般也使用 weak；当然，也可以使用strong。在下文也有论述：***《IBOutlet连出来的视图属性为什么可以被设置成weak?》***
 
 #### 不同点：
 
- 1. ==`weak` 此特质表明该属性定义了一种“非拥有关系” (nonowning relationship)。为这种属性设置新值时，设置方法既不保留新值，也不释放旧值。此特质同assign类似，
-然而在属性所指的对象遭到摧毁时，属性值也会清空(nil out)。
-而 `assign` 的“设置方法”只会执行针对“纯量类型” (scalar type，例如 CGFloat 或 
-NSlnteger 等)的简单赋值操作。==
+ 1. ==`weak` 此特质表明该属性定义了一种“非拥有关系” (nonowning relationship)。为这种属性设置新值时，设置方法既不保留新值，也不释放旧值。此特质同assign类似。在属性所指的对象遭到摧毁时，属性值也会清空(nil out)。==
 
- 2. ==assign 可以用非 OC 对象,而 weak 必须用于 OC 对象==
+==而 `assign` 的“设置方法”只用于基本数据类型的简单赋值操作。==
+
+ 2. ==assign 可以用非 OC 对象，而 weak 必须用于 OC 对象。==
 
 ### 3. 怎么用 copy 关键字？
 用途：
@@ -26,7 +25,15 @@ NSlnteger 等)的简单赋值操作。==
  1. NSString、NSArray、NSDictionary 等等经常使用copy关键字，==是因为他们有对应的可变类型==：NSMutableString、NSMutableArray、NSMutableDictionary；
  2. block 也经常使用 copy 关键字，具体原因见[官方文档：***Objects Use Properties to Keep Track of Blocks***](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/WorkingwithBlocks/WorkingwithBlocks.html#//apple_ref/doc/uid/TP40011210-CH8-SW12)：
 
-  block 使用 copy 是从 MRC 遗留下来的“传统”,在 MRC 中,方法内部的 block 是在栈区的,使用 copy 可以把它放到堆区。在 ARC 中写不写都行：对于 block 使用 copy 还是 strong 效果是一样的，但写上 copy 也无伤大雅，还能时刻提醒我们：编译器自动对 block 进行了 copy 操作。如果不写 copy ，该类的调用者有可能会忘记或者根本不知道“编译器会自动对 block 进行了 copy 操作”，他们有可能会在调用之前自行拷贝属性值。这种操作多余而低效。你也许会感觉我这种做法有些怪异，不需要写依然写。如果你这样想，其实是你“日用而不知”，你平时开发中是经常在用我说的这种做法的，比如下面的属性不写copy也行，但是你会选择写还是不写呢？
+
+
+block 使用 copy 是从 MRC 遗留下来的“传统”：
+
+**在 MRC 中，方法内部的 block 是在栈区的，使用 copy 可以把它放到堆区。**
+
+**在 ARC 中写不写都行：对于 block 使用 copy 还是 strong 效果是一样的，但写上 copy 也无伤大雅，还能时刻提醒我们：编译器自动对 block 进行了 copy 操作。**
+
+<font color=#038103>如果不写 copy ，该类的调用者有可能会忘记或者根本不知道”编译器会自动对 block 进行了 copy 操作”，他们有可能会在调用之前手动拷贝属性值。这种操作多余而低效。</font>你也许会感觉我这种做法有些怪异，不需要写依然写。如果你这样想，其实是你“日用而不知”，你平时开发中是经常在用我说的这种做法的，比如下面的属性不写copy也行，但是你会选择写还是不写呢？
 
  ```Objective-C
  @property (nonatomic, copy) NSString *userId;
@@ -46,7 +53,7 @@ NSlnteger 等)的简单赋值操作。==
 
 下面做下解释：
  ==copy 此特质所表达的所属关系与 strong 类似。然而设置方法并不保留新值，而是将其“拷贝” (copy)。
-当属性类型为 NSString 时，经常用此特质来保护其封装性，因为传递给设置方法的新值有可能指向一个 NSMutableString 类的实例==。**这个类是 NSString 的子类，表示一种可修改其值的字符串，此时若是不拷贝字符串，那么设置完属性之后，字符串的值就可能会在对象不知情的情况下遭人更改**。所以，这时就要拷贝一份“不可变” (immutable)的字符串，确保对象中的字符串值不会无意间变动。只要实现属性所用的对象是“可变的” (mutable)，就应该在设置新属性值时拷贝一份。
+**当属性类型为 NSString 时，经常用此特质来保护其封装性**，因为传递给设置方法的新值有可能指向一个 NSMutableString 类的实例==。**这个类是 NSString 的子类，表示一种可修改其值的字符串，此时若是不拷贝字符串，那么设置完属性之后，字符串的值就可能会在对象不知情的情况下遭人更改**。所以，这时就要拷贝一份“不可变” (immutable)的字符串，确保对象中的字符串值不会无意间变动。只要实现属性所用的对象是“可变的” (mutable)，就应该在设置新属性值时拷贝一份。
 
 
 > 用 `@property` 声明 NSString、NSArray、NSDictionary 经常使用 copy 关键字，是因为他们有对应的可变类型：NSMutableString、NSMutableArray、NSMutableDictionary，他们之间可能进行赋值操作，为确保对象中的字符串值不会无意间变动，应该在设置新属性值时拷贝一份。
@@ -101,10 +108,9 @@ self.mutableArray = array;
 
 在iOS开发中，你会发现，几乎所有属性都声明为 nonatomic。
 
-一般情况下并不要求属性必须是“原子的”，因为这并不能保证“线程安全” ( thread safety)，若要实现“线程安全”的操作，还需采用更为深层的锁定机制才行。例如，一个线程在连续多次读取某属性值的过程中有别的线程在同时改写该值，那么即便将属性声明为 atomic，也还是会读到不同的属性值。
+一般情况下并不要求属性必须是“原子的”，因为这并不能保证“线程安全” ( thread safety)。若要实现“线程安全”的操作，还需采用更为深层的锁定机制才行。例如，一个线程在连续多次读取某属性值的过程中有别的线程在同时改写该值，那么即便将属性声明为 atomic，也还是会读到不同的属性值。
 
-因此，开发iOS程序时一般都会使用 nonatomic 属性。但是在开发 Mac OS X 程序时，使用
- atomic 属性通常都不会有性能瓶颈。
+因此，开发iOS程序时一般都会使用 nonatomic 属性。但是在开发 Mac OS X 程序时，使用 atomic 属性通常都不会有性能瓶颈。
 
 ### 5. 如何让自己的类用 copy 修饰符？如何重写带 copy 关键字的 setter？
 
