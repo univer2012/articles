@@ -128,7 +128,9 @@ self.mutableArray = array;
  ```Objective-C
 - (id)copyWithZone:(NSZone *)zone;
  ```
-注意：一提到让自己的类用 copy 修饰符，我们总是想覆写copy方法，其实真正需要实现的却是 “copyWithZone” 方法。
+> 注意：一提到让自己的类用 copy 修饰符，我们总是想覆写copy方法，其实真正需要实现的却是 “copyWithZone” 方法。
+
+
 
 以第一题的代码为例：
 
