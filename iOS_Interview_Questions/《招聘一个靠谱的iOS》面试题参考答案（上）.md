@@ -119,6 +119,7 @@ self.mutableArray = array;
 
 
 
+#### 第1个问题：如何让自己的类用 copy 修饰符？
 
 具体步骤：
 
@@ -146,14 +147,14 @@ self.mutableArray = array;
 	    CYLSexWoman
 	};
 
-	@interface CYLUser : NSObject<NSCopying>
+@interface CYLUser : NSObject<NSCopying>
 
-	@property (nonatomic, readonly, copy) NSString *name;
-	@property (nonatomic, readonly, assign) NSUInteger age;
-	@property (nonatomic, readonly, assign) CYLSex sex;
+@property(nonatomic,copy,readonly)NSString *name;
+@property(nonatomic,assign, readonly)NSUInteger age;
+@property(nonatomic,assign, readonly)CYLSex sex;
 
-	- (instancetype)initWithName:(NSString *)name age:(NSUInteger)age sex:(CYLSex)sex;
-	+ (instancetype)userWithName:(NSString *)name age:(NSUInteger)age sex:(CYLSex)sex;
+- (instancetype)initWithName:(NSString *)name age:(NSUInteger)age sex:(CYLSex)sex;
++ (instancetype)userWithName:(NSString *)name age:(NSUInteger)age sex:(CYLSex)sex;
 
 	@end
  ```
@@ -163,12 +164,9 @@ self.mutableArray = array;
 
 
 ```Objective-C
-- (id)copyWithZone:(NSZone *)zone {
-	CYLUser *copy = [[[self class] allocWithZone:zone] 
-		             initWithName:_name
- 							      age:_age
-						          sex:_sex];
-	return copy;
+-(id)copyWithZone:(NSZone *)zone {
+    CYLUser *copy = [[[self copy] allocWithZone:zone] initWithName:_name age:_age sex:_sex];
+    return copy;
 }
 ```
 但在实际的项目中，不可能这么简单，遇到更复杂一点，比如类对象中的数据结构可能并未在初始化方法中设置好，需要另行设置。举个例子，假如 CYLUser 中含有一个数组，与其他 CYLUser 对象建立或解除朋友关系的那些方法都需要操作这个数组。那么在这种情况下，你得把这个包含朋友对象的数组也一并拷贝过来。下面列出了实现此功能所需的全部代码:
@@ -200,8 +198,6 @@ typedef NS_ENUM(NSInteger, CYLSex) {
 
 // .m文件
 
-
-
  ```Objective-C
 // .m文件
 // http://weibo.com/luohanchenyilong/
@@ -216,9 +212,7 @@ typedef NS_ENUM(NSInteger, CYLSex) {
     _name = [name copy];
 }
 
-- (instancetype)initWithName:(NSString *)name
-                         age:(NSUInteger)age
-                         sex:(CYLSex)sex {
+- (instancetype)initWithName:(NSString *)name age:(NSUInteger)age sex:(CYLSex)sex {
     if(self = [super init]) {
         _name = [name copy];
         _age = age;
@@ -228,30 +222,26 @@ typedef NS_ENUM(NSInteger, CYLSex) {
     return self;
 }
 
-- (void)addFriend:(CYLUser *)user {
-    [_friends addObject:user];
++ (instancetype)userWithName:(NSString *)name age:(NSUInteger)age sex:(CYLSex)sex {
+    return [[CYLUser alloc] initWithName:name age:age sex:sex];
 }
 
-- (void)removeFriend:(CYLUser *)user {
+-(void)addFriend:(CYLUser *)user {
+    [_friends addObject:user];
+}
+-(void)removeFriend:(CYLUser *)user {
     [_friends removeObject:user];
 }
 
-- (id)copyWithZone:(NSZone *)zone {
-    CYLUser *copy = [[[self class] allocWithZone:zone]
-                     initWithName:_name
-                     age:_age
-                     sex:_sex];
+-(id)copyWithZone:(NSZone *)zone {
+    CYLUser *copy = [[[self copy] allocWithZone:zone] initWithName:_name age:_age sex:_sex];
     copy->_friends = [_friends mutableCopy];
     return copy;
 }
 
-- (id)deepCopy {
-    CYLUser *copy = [[[self class] alloc]
-                     initWithName:_name
-                     age:_age
-                     sex:_sex];
-    copy->_friends = [[NSMutableSet alloc] initWithSet:_friends
-                                             copyItems:YES];
+- (id)mutableCopyWithZone:(nullable NSZone *)zone {
+    CYLUser *copy = [[[self copy]allocWithZone:zone] initWithName:_name age:_age sex:_sex];
+    copy->_friends = [[NSMutableSet alloc] initWithSet:_friends copyItems:YES];
     return copy;
 }
 
@@ -269,17 +259,16 @@ typedef NS_ENUM(NSInteger, CYLSex) {
 	
 
  ```Objective-C
-- (id)deepCopy {
-    CYLUser *copy = [[[self class] alloc]
-                     initWithName:_name
-                     age:_age
-                     sex:_sex];
-    copy->_friends = [[NSMutableSet alloc] initWithSet:_friends
-                                             copyItems:YES];
+- (id)mutableCopyWithZone:(nullable NSZone *)zone {
+    CYLUser *copy = [[[self copy]allocWithZone:zone] initWithName:_name age:_age sex:_sex];
+    copy->_friends = [[NSMutableSet alloc] initWithSet:_friends copyItems:YES];
     return copy;
 }
-
  ```
+
+
+
+#### 第2个问题：如何重写带 copy 关键字的 setter？
 
 至于***如何重写带 copy 关键字的 setter***这个问题，
 
@@ -327,7 +316,6 @@ typedef NS_ENUM(NSInteger, CYLSex) {
 
 你可能会说：
 
-
 之所以在这里做`if判断` 这个操作：是因为一个 if 可能避免一个耗时的copy，还是很划算的。
 (在刚刚讲的：《如何让自己的类用 copy 修饰符？》里的那种复杂的copy，我们可以称之为 “耗时的copy”，但是对 NSString 的 copy 还称不上。)
 
@@ -351,11 +339,12 @@ typedef NS_ENUM(NSInteger, CYLSex) {
 [a setX:[a x]];   //队友咆哮道：你在干嘛？！！
 ```
 
-> ==不要在 setter 里进行像 `if(_obj != newObj)` 这样的判断。==（该观点参考链接：[ ***How To Write Cocoa Object Setters： Principle 3: Only Optimize After You Measure*** ](http://vgable.com/blog/tag/autorelease/)
+> **不要在 setter 里进行像 `if(_obj != newObj)` 这样的判断**。支持此观点的 [ How To Write Cocoa Object Setters： Principle 3: Only Optimize After You Measure ](http://vgable.com/blog/tag/autorelease/) 给出的理由是：「更少的代码。这种模式只有2行代码，没有条件。我写的时候很少会出错。它总是做同样的事情，这简化了调试。」
 > ）
 
 
-什么情况会在 copy setter 里做 if 判断？
+
+**什么情况会在 copy setter 里做 if 判断？**
 例如，车速可能就有最高速的限制，车速也不可能出现负值，如果车子的最高速为300，则 setter 的方法就要改写成这样：
 
 
@@ -369,23 +358,20 @@ typedef NS_ENUM(NSInteger, CYLSex) {
 
 
 
-回到这个题目，如果单单就上文的代码而言，我们不需要也不能重写 name 的 setter ：由于是 name 是只读属性，所以编译器不会为其创建对应的“设置方法”，用初始化方法设置好属性值之后，就不能再改变了。（ 在本例中，之所以还要声明属性的“内存管理语义”--copy，是因为：如果不写 copy，该类的调用者就不知道初始化方法里会拷贝这些属性，他们有可能会在调用初始化方法之前自行拷贝属性值。这种操作多余而低效）。
+回到这个题目，<font color=#FF0000>如果单单就上文的代码而言，我们不需要也不能重写 `name` 的 setter ：由于 `name` 是只读属性，所以编译器不会为其创建对应的“设置方法”，用初始化方法设置好属性值之后，就不能再改变了</font>。（ 在本例中，<font color=#038103>之所以还要声明属性的“内存管理语义”--copy，是因为：如果不写 copy，该类的调用者就不知道初始化方法里会拷贝这些属性，他们有可能会在调用初始化方法之前自行拷贝属性值。这种操作多余而低效</font>）。
 
 那如何确保 name 被 copy？在初始化方法(initializer)中做：
 
  ```Objective-C
-	- (instancetype)initWithName:(NSString *)name 
-								 age:(NSUInteger)age 
-								 sex:(CYLSex)sex {
-	     if(self = [super init]) {
-	     	_name = [name copy];
-	     	_age = age;
-	     	_sex = sex;
-	     	_friends = [[NSMutableSet alloc] init];
-	     }
-	     return self;
-	}
-
+- (instancetype)initWithName:(NSString *)name age:(NSUInteger)age sex:(CYLSex)sex {
+    if(self = [super init]) {
+        _name = [name copy];
+        _age = age;
+        _sex = sex;
+        _friends = [[NSMutableSet alloc] init];
+    }
+    return self;
+}
  ```
 
 
@@ -401,13 +387,12 @@ typedef NS_ENUM(NSInteger, CYLSex) {
 > “属性” (property)有两大概念：ivar（实例变量）、存取方法（access method ＝ getter + setter）。
 
 “属性” (property)作为 Objective-C 的一项特性，主要的作用就在于封装对象中的数据。 Objective-C 对象通常会把其所需要的数据保存为各种实例变量。实例变量一般通过“存取方法”(access method)来访问。其中，“获取方法” (getter)用于读取变量值，而“设置方法” (setter)用于写入变量值。这个概念已经定型，并且经由“属性”这一特性而成为 `Objective-C 2.0` 的一部分。
+
 而在正规的 Objective-C 编码风格中，存取方法有着严格的命名规范。
+
 正因为有了这种严格的命名规范，所以 Objective-C 这门语言才能根据名称自动创建出存取方法。其实也可以把属性当做一种关键字，其表示:
 
-> 编译器会自动写出一套存取方法，用以访问给定类型中具有给定名称的变量。
-> 所以你也可以这么说：
-
-> @property = getter + setter;
+> 编译器会自动写出一套存取方法，用以访问给定类型中具有给定名称的变量。所以你也可以这么说： @property = getter + setter;
 
 例如下面这个类：
 
@@ -465,7 +450,7 @@ typedef struct {
 
 例如：我们定义一个string的property`@property (nonatomic, copy) NSString *string;`，通过 `property_getAttributes(property)`获取到attributes并打印出来之后的结果为`T@"NSString",C,N,V_string`
 
-其中T就代表类型，可参阅[Type Encodings](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html#//apple_ref/doc/uid/TP40008048-CH100-SW1)，C就代表Copy，N代表nonatomic，V就代表对于的实例变量。
+其中T就代表类型，可参阅[Type Encodings](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html#//apple_ref/doc/uid/TP40008048-CH100-SW1)，C就代表Copy，N代表nonatomic，V就代表对应的实例变量。
 
 
 
@@ -473,12 +458,11 @@ typedef struct {
 
 > “自动合成”( autosynthesis)
 
-完成属性定义后，编译器会自动编写访问这些属性所需的方法，此过程叫做“自动合成”(autosynthesis)。需要强调的是，这个过程由编译
-器在编译期执行，所以编辑器里看不到这些“合成方法”(synthesized method)的源代码。除了生成方法代码 getter、setter 之外，编译器还要自动向类中添加适当类型的实例变量，并且在属性名前面加下划线，以此作为实例变量的名字。在前例中，会生成两个实例变量，其名称分别为
- `_firstName` 与 `_lastName`。也可以在类的实现代码里通过
- `@synthesize` 语法来指定实例变量的名字.
+完成属性定义后，编译器会自动编写访问这些属性所需的方法，此过程叫做“<font color=#038103>**自动合成**</font>”(autosynthesis)。
 
+需要强调的是，这个过程由编译器在编译期执行，所以编辑器里看不到这些“合成方法”(synthesized method)的源代码。除了生成方法代码 getter、setter 之外，编译器还要自动向类中添加适当类型的实例变量，并且在属性名前面加下划线，以此作为实例变量的名字。在前例中，会生成两个实例变量，其名称分别为 `_firstName` 与 `_lastName`。
 
+也可以在类的实现代码里通过 `@synthesize` 语法来指定实例变量的名字.
 
  ```Objective-C
 @implementation Person
@@ -487,7 +471,9 @@ typedef struct {
 @end
  ```
 
-我为了搞清属性是怎么实现的,曾经反编译过相关的代码,他大致生成了五个东西
+
+
+我为了搞清属性是怎么实现的，曾经反编译过相关的代码，他大致生成了五个东西：
 
  1. `OBJC_IVAR_$类名$属性名称` ：该属性的“偏移量” (offset)，这个偏移量是“硬编码” (hardcode)，表示该变量距离存放对象的内存区域的起始地址有多远。
  2. setter 与 getter 方法对应的实现函数
@@ -495,16 +481,19 @@ typedef struct {
  2. `method_list` ：方法列表
  2. `prop_list` ：属性列表
 
+也就是说，我们每次在增加一个属性，系统都会在 `ivar_list` 中添加一个成员变量的描述，在 `method_list` 中增加 setter 与 getter 方法的描述，在属性列表中增加一个属性的描述，然后计算该属性在对象中的偏移量，然后给出 setter 与 getter 方法对应的实现。在 setter 方法中从偏移量的位置开始赋值，在 getter 方法中从偏移量开始取值。为了能够读取正确字节数，系统对象偏移量的指针类型进行了类型强转。
 
-也就是说我们每次在增加一个属性,系统都会在 `ivar_list` 中添加一个成员变量的描述,在 `method_list` 中增加 setter 与 getter 方法的描述,在属性列表中增加一个属性的描述,然后计算该属性在对象中的偏移量,然后给出 setter 与 getter 方法对应的实现,在 setter 方法中从偏移量的位置开始赋值,在 getter 方法中从偏移量开始取值,为了能够读取正确字节数,系统对象偏移量的指针类型进行了类型强转.
+
 
 ### 7. @protocol 和 category 中如何使用 @property
 
- 1. 在 protocol 中使用 property 只会生成 setter 和 getter 方法声明,我们使用属性的目的,是希望遵守我协议的对象能实现该属性
- 2. category 使用 @property 也是只会生成 setter 和 getter 方法的声明,如果我们真的需要给 category 增加属性的实现,需要借助于运行时的两个函数：
+ 1. 在 protocol 中使用 `@property` 只会生成 setter 和 getter 方法声明。我们使用属性的目的，是希望遵守协议的对象能实现该属性。
 
-  1. `objc_setAssociatedObject`
-  2. `objc_getAssociatedObject`
+ 2. category 使用 `@property` 也是只会生成 setter 和 getter 方法的声明。如果我们真的需要给 category 增加属性的实现，需要借助于运行时的两个函数：
+
+  - `objc_setAssociatedObject`
+
+  - `objc_getAssociatedObject`
 
 ### 8. runtime 如何实现 weak 属性
 
@@ -641,9 +630,11 @@ objc_storeWeak(&obj1, 0);
 
 `objc_storeWeak` 函数把第二个参数--赋值对象（obj）的内存地址作为键值，将第一个参数--weak修饰的属性变量（obj1）的内存地址注册到 weak 表中。如果第二个参数（obj）为0（nil），那么把变量（obj1）的地址从 weak 表中删除，在后面的相关一题会详解。
 
+
+
 使用伪代码是为了方便理解，下面我们“真枪实弹”地实现下：
 
-> 如何让不使用weak修饰的@property，拥有weak的效果。
+#### 如何让不使用weak修饰的@property，拥有weak的效果。
 
 
 我们从setter方法入手：
@@ -806,7 +797,13 @@ NSObject *foo = [[NSObject alloc] init];
 参考博文： [***Fun With the Objective-C Runtime: Run Code at Deallocation of Any Object***](http://stackoverflow.com/a/31560217/3395008)
 
 
+
+---
+
+
+
 ### 9. @property中有哪些属性关键字？/ @property 后面可以有哪些修饰符？
+
 属性可以拥有的特质分为四类:
 
  1. 原子性--- `nonatomic` 特质
@@ -849,8 +846,7 @@ NSObject *foo = [[NSObject alloc] init];
 - (NSString *)initBy __attribute__((objc_method_family(none)));
  ```
 
- 3. 不常用的：`nonnull`,`null_resettable`,`nullable`
-
+ 5. 不常用的：`nonnull`,`null_resettable`,`nullable`
 
 注意：很多人会认为如果属性具备 nonatomic 特质，则不使用
 “同步锁”。其实在属性设置方法中使用的是自旋锁，自旋锁相关代码如下：
@@ -935,8 +931,8 @@ void objc_setProperty(id self, SEL _cmd, ptrdiff_t offset, id newValue, BOOL ato
 
 ### 11. @synthesize和@dynamic分别有什么作用？
 
- 1. @property有两个对应的词，一个是 @synthesize，一个是 @dynamic。如果 @synthesize和 @dynamic都没写，那么默认的就是`@syntheszie var = _var;`
- 2. @synthesize 的语义是如果你没有手动实现 setter 方法和 getter 方法，那么编译器会自动为你加上这两个方法。
+ 1. `@property`有两个对应的词，一个是 `@synthesize`，一个是 `@dynamic`。如果 @synthesize和 @dynamic都没写，那么默认的就是`@syntheszie var = _var;`
+ 2. @synthesize 的语义是：如果你没有手动实现 setter 方法和 getter 方法，那么编译器会自动为你加上这两个方法。
  3. @dynamic 告诉编译器：属性的 setter 与 getter 方法由用户自己实现，不自动生成。（当然对于 readonly 的属性只需提供 getter 即可）。假如一个属性被声明为 @dynamic var，然后你没有提供 @setter方法和 @getter 方法，编译的时候没问题，但是当程序运行到 `instance.var = someVar`，由于缺 setter 方法会导致程序崩溃；或者当运行到 `someVar = var` 时，由于缺 getter 方法同样会导致崩溃。编译时没问题，运行时才执行相应的方法，这就是所谓的动态绑定。
 
 ### 12. ARC下，不显式指定任何属性关键字时，默认的关键字都有哪些？
@@ -954,7 +950,7 @@ void objc_setProperty(id self, SEL _cmd, ptrdiff_t offset, id newValue, BOOL ato
 
 
  1. **因为父类指针可以指向子类对象,使用 copy 的目的是为了让本对象的属性不受外界影响**,使用 copy 无论给我传入是一个可变对象还是不可对象,我本身持有的就是一个不可变的副本.
- 2. 如果我们使用是 strong ,那么这个属性就有可能指向一个可变对象,如果这个可变对象在外部被修改了,那么会影响该属性.
+ 2. 如果我们使用是 strong ，那么这个属性就有可能指向一个可变对象，如果这个可变对象在外部被修改了，那么会影响该属性。
 
  copy 此特质所表达的所属关系与 strong 类似。然而设置方法并不保留新值，而是将其“拷贝” (copy)。
 当属性类型为 NSString 时，经常用此特质来保护其封装性，因为传递给设置方法的新值有可能指向一个 NSMutableString 类的实例。这个类是 NSString 的子类，表示一种可修改其值的字符串，此时若是不拷贝字符串，那么设置完属性之后，字符串的值就可能会在对象不知情的情况下遭人更改。所以，这时就要拷贝一份“不可变” (immutable)的字符串，确保对象中的字符串值不会无意间变动。只要实现属性所用的对象是“可变的” (mutable)，就应该在设置新属性值时拷贝一份。
@@ -1006,7 +1002,7 @@ void objc_setProperty(id self, SEL _cmd, ptrdiff_t offset, id newValue, BOOL ato
  1. 对非集合类对象的 copy 与 mutableCopy 操作；
  2. 对集合类对象的 copy 与 mutableCopy 操作。
 
-#### 1. 对非集合类对象的copy操作：
+#### 1. 对非集合类对象的copy与mutableCopy
 
 在非集合类对象中：
 1. ==对 immutable 对象进行 copy 操作，是指针复制，mutableCopy 操作时内容复制==；
@@ -1086,9 +1082,11 @@ NSMutableArray *mCopyArray = [array mutableCopy];
 
 这些说法，笔者下文中，可能都会用到，指的是一个东西。
 
+正如 [Apple官方文档 ***You Can Customize Synthesized Instance Variable Names***](https://camo.githubusercontent.com/d562010accc0b123c355d48d56b4eb426b032641/687474703a2f2f692e696d6775722e636f6d2f443664307a474a2e706e67) 所说：
 
-正如
-[Apple官方文档 ***You Can Customize Synthesized Instance Variable Names***](https://camo.githubusercontent.com/d562010accc0b123c355d48d56b4eb426b032641/687474703a2f2f692e696d6775722e636f6d2f443664307a474a2e706e67)
+![](https://camo.githubusercontent.com/d562010accc0b123c355d48d56b4eb426b032641/687474703a2f2f692e696d6775722e636f6d2f443664307a474a2e706e67)
+
+
 
 如果使用了属性的话，那么编译器就会自动编写访问属性所需的方法，此过程叫做“自动合成”( auto synthesis)。需要强调的是，这个过程由编译器在编译期执行，所以编辑器里看不到这些“合成方法” (synthesized method)的源代码。除了生成方法代码之外，编译器还要自动向类中添加适当类型的实例变量，并且在属性名前面加下划线，以此作为实例变量的名字。
 
@@ -1115,21 +1113,22 @@ NSMutableArray *mCopyArray = [array mutableCopy];
 
 上述语法会将生成的实例变量命名为 `_myFirstName` 与 `_myLastName` ，而不再使用默认的名字。一般情况下无须修改默认的实例变量名，但是如果你不喜欢以下划线来命名实例变量，那么可以用这个办法将其改为自己想要的名字。笔者还是推荐使用默认的命名方案，因为如果所有人都坚持这套方案，那么写出来的代码大家都能看得懂。
 
-总结下 @synthesize 合成实例变量的规则，有以下几点：
+总结下 `@synthesize` 合成实例变量的规则，有以下几点：
 
 
- 1. 如果指定了成员变量的名称,会生成一个指定的名称的成员变量,
+  1. 如果指定了成员变量的名称，会生成一个指定名称的成员变量；
 
- 2. 如果这个成员已经存在了就不再生成了.
- 2. 如果是 `@synthesize foo;` 还会生成一个名称为foo的成员变量，也就是说：
+  2. 如果这个成员已经存在了就不再生成了；
 
- > 如果没有指定成员变量的名称会自动生成一个属性同名的成员变量,
+  3. 如果是 `@synthesize foo;` 还会生成一个名称为`foo`的成员变量，也就是说：
+
+     > 如果没有指定成员变量的名称会自动生成一个属性同名的成员变量,
+
+  4. 如果是 `@synthesize foo = _foo;` 就不会生成成员变量了.
 
 
 
- 2. 如果是 `@synthesize foo = _foo;` 就不会生成成员变量了.
-
-假如 property 名为 foo，存在一个名为 `_foo` 的实例变量，那么还会自动合成新变量么？
+**假如 property 名为 foo，存在一个名为 `_foo` 的实例变量，那么还会自动合成新变量么？**
 不会。如下图：
 
 ![enter image description here](https://camo.githubusercontent.com/8e11101c9fe0b3defc7fbd144c0dca9fdf0471d0/687474703a2f2f692e696d6775722e636f6d2f743238676534572e706e67)
@@ -1148,9 +1147,9 @@ NSMutableArray *mCopyArray = [array mutableCopy];
  2. ==在 category 中定义的所有属性==
  2. ==重载的属性==
 
- 当你在子类中重载了父类中的属性，你必须 使用 `@synthesize` 来手动合成ivar。
+ **当你在子类中重载了父类中的属性，你必须 使用 `@synthesize` 来手动合成ivar。**
 
-除了后三条，对其他几个我们可以总结出一个规律：当你想手动管理 @property 的所有内容时，你就会尝试通过实现 @property 的所有“存取方法”（the accessor methods）或者使用 `@dynamic` 来达到这个目的，这时编译器就会认为你打算手动管理 @property，于是编译器就禁用了 autosynthesis（自动合成）。
+除了后三条，对其他几个我们可以总结出一个规律：当你想手动管理 @property 的所有内容时，你就会尝试通过实现 @property 的所有“存取方法”（the accessor methods）。或者使用 `@dynamic` 来达到这个目的，这时编译器就会认为你打算手动管理 @property，于是编译器就禁用了 autosynthesis（自动合成）。
 
 因为有了 autosynthesis（自动合成），大部分开发者已经习惯不去手动定义ivar，而是依赖于 autosynthesis（自动合成），但是一旦你需要使用ivar，而 autosynthesis（自动合成）又失效了，如果不去手动定义ivar，那么你就得借助 `@synthesize` 来手动合成 ivar。
 
@@ -1215,14 +1214,23 @@ NSMutableArray *mCopyArray = [array mutableCopy];
  ```
 
 结果编译器报错：
-![enter image description here](http://i.imgur.com/fAEGHIo.png)
+![enter image description here](https://camo.githubusercontent.com/a569a90281598d8cc74156fe5f0e3a6ddbf8fc6b/687474703a2f2f692e696d6775722e636f6d2f6641454748496f2e706e67)
 
-当你同时重写了 setter 和 getter 时，系统就不会生成 ivar（实例变量/成员变量）。这时候有两种选择：
+
+
+**当你同时重写了 setter 和 getter 时，系统就不会生成 ivar（实例变量/成员变量）。这时候有两种选择：**
 
  1. 要么如第14行：手动创建 ivar
  2. 要么如第17行：使用`@synthesize foo = _foo;` ，关联 @property 与 ivar。
 
 更多信息，请戳- 》[ ***When should I use @synthesize explicitly?*** ](http://stackoverflow.com/a/19821816/3395008)
+
+
+
+---
+
+
+
 ### 16. objc中向一个nil对象发送消息将会发生什么？
 在 Objective-C 中向 nil 发送消息是完全有效的——只是在运行时不会有任何作用:
 
@@ -1236,7 +1244,7 @@ Person * motherInlaw = [[aPerson spouse] mother];
 
  如果 spouse 对象为 nil，那么发送给 nil 的消息 mother 也将返回 nil。
  2. 如果方法返回值为指针类型，其指针大小为小于或者等于sizeof(void*)，float，double，long double 或者 long long 的整型标量，发送给 nil 的消息将返回0。
- 2. 如果方法返回值为结构体,发送给 nil 的消息将返回0。结构体中各个字段的值将都是0。
+ 2. 如果方法返回值为结构体，发送给 nil 的消息将返回0。结构体中各个字段的值将都是0。
  2. 如果方法的返回值不是上述提到的几种情况，那么发送给 nil 的消息的返回值将是未定义的。
 
 具体原因如下：
@@ -1606,7 +1614,7 @@ objc Runtime开源代码对- (Class)class方法的实现:
 
 ### 22. runtime如何通过selector找到对应的IMP地址？（分别考虑类方法和实例方法）
 
-每一个类对象中都一个方法列表,方法列表中记录着方法的名称,方法实现,以及参数类型,其实selector本质就是方法名称,通过这个方法名称就可以在方法列表中找到对应的方法实现.
+每一个类对象中都一个方法列表，方法列表中记录着方法的名称，方法实现，以及参数类型，其实selector本质就是方法名称，通过这个方法名称就可以在方法列表中找到对应的方法实现。
 
 ### 23. 使用runtime Associate方法关联的对象，需要在主对象dealloc的时候释放么？
 

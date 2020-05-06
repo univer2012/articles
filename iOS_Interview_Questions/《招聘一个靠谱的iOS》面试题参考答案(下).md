@@ -6,19 +6,19 @@
 > `_objc_msgForward`是 IMP 类型，用于消息转发的：当向一个对象发送一条消息，但它并没有实现的时候，`_objc_msgForward`会尝试做消息转发。
 
 我们可以这样创建一个`_objc_msgForward`对象：
-```
+```objc
 IMP msgForwardIMP = _objc_msgForward;
 ```
 
-在[上篇](https://github.com/ChenYilong/iOSInterviewQuestions)中的《objc中向一个对象发送消息`[obj foo]`和`objc_msgSend()`函数之间有什么关系？》曾提到`objc_msgSend`在“消息传递”中的作用。在“消息传递”过程中，`objc_msgSend`的动作比较清晰：首先在 Class 中的缓存查找 IMP （没缓存则初始化缓存），如果没找到，则向父类的 Class 查找。如果一直查找到根类仍旧没有实现，则用`_objc_msgForward`函数指针代替 IMP 。最后，执行这个 IMP 。
+在[上篇](https://github.com/ChenYilong/iOSInterviewQuestions)中的《objc中向一个对象发送消息`[obj foo]`和`objc_msgSend()`函数之间有什么关系？》曾提到`objc_msgSend`在“消息传递”中的作用。**在“消息传递”过程中，`objc_msgSend`的动作比较清晰：首先在 Class 中的缓存查找 IMP （没缓存则初始化缓存），如果没找到，则向父类的 Class 查找。如果一直查找到根类仍旧没有实现，则用`_objc_msgForward`函数指针代替 IMP 。最后，执行这个 IMP 。**
 
 Objective-C运行时是开源的，所以我们可以看到它的实现。[打开 Apple Open Source 里Mac代码里的obj包](https://opensource.apple.com/tarballs/objc4/) 下载一个最新版本，找到 `objc-runtime-new.mm`，进入之后搜索`_objc_msgForward`。
-![](https://raw.githubusercontent.com/univer2012/personal-document/master/Pictures/2019/%E3%80%8A%E6%8B%9B%E8%81%98%E4%B8%80%E4%B8%AA%E9%9D%A0%E8%B0%B1%E7%9A%84iOS%E3%80%8B%E9%9D%A2%E8%AF%95%E9%A2%98%E5%8F%82%E8%80%83%E7%AD%94%E6%A1%88(%E4%B8%8B)_1.png)
+![《招聘一个靠谱的iOS》面试题参考答案(下)_1.png](https://upload-images.jianshu.io/upload_images/843214-c61438d9c46c0d2d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 里面有对`_objc_msgForward`的功能解释：
-![](https://raw.githubusercontent.com/univer2012/personal-document/master/Pictures/2019/%E3%80%8A%E6%8B%9B%E8%81%98%E4%B8%80%E4%B8%AA%E9%9D%A0%E8%B0%B1%E7%9A%84iOS%E3%80%8B%E9%9D%A2%E8%AF%95%E9%A2%98%E5%8F%82%E8%80%83%E7%AD%94%E6%A1%88(%E4%B8%8B)_2.png)
+![《招聘一个靠谱的iOS》面试题参考答案(下)_2.png](https://upload-images.jianshu.io/upload_images/843214-a50df15c8ce0125c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-```
+```objc
 /***********************************************************************
 * lookUpImpOrForward.
 * The standard IMP lookup.
@@ -33,7 +33,7 @@ Objective-C运行时是开源的，所以我们可以看到它的实现。[打�
 **********************************************************************/
 ```
 对 `objc-runtime-new.mm`文件里与`_objc_msgForward`有关的三个函数使用伪代码展示下：
-```
+```objc
 //  objc-runtime-new.mm 文件里与 _objc_msgForward 有关的三个函数使用伪代码展示
 //  Created by https://github.com/ChenYilong
 //  Copyright (c)  微博@iOS程序犭袁(http://weibo.com/luohanchenyilong/). All rights reserved.
@@ -74,23 +74,23 @@ IMP lookUpImpOrNil(Class cls, SEL sel) {
 
 虽然Apple没有公开`_objc_msgForward`的实现源码，但是我们还是能得出结论：
 
-> `_objc_msgForward`是一个函数指针（和 IMP 的类型一样），是用于消息转发的：当向一个对象发送一条消息，但它并没有实现的时候，`_objc_msgForward`会尝试做消息转发。
+> **`_objc_msgForward`是一个函数指针（和 IMP 的类型一样），是用于消息转发的：当向一个对象发送一条消息，但它并没有实现的时候，`_objc_msgForward`会尝试做消息转发。**
 >
-> 在上篇中的《objc中向一个对象发送消息`[obj foo]` 和`objc_msgSend()`函数之间有什么关系？》曾提到`objc_msgSend`在“消息传递”中的作用。在“消息传递”过程中，`objc_msgSend`的动作比较清晰：首先在 Class 中的缓存查找 IMP （没缓存则初始化缓存），如果没找到，则向父类的 Class 查找。如果一直查找到根类仍旧没有实现，则用`_objc_msgForward`函数指针代替 IMP 。最后，执行这个 IMP 。
+> 在上篇中的《objc中向一个对象发送消息`[obj foo]` 和`objc_msgSend()`函数之间有什么关系？》曾提到`objc_msgSend`在“消息传递”中的作用。<font color=#038103>**在“消息传递”过程中，`objc_msgSend`的动作比较清晰：首先在 Class 中的缓存查找 IMP （没缓存则初始化缓存），如果没找到，则向父类的 Class 查找。如果一直查找到根类仍旧没有实现，则用`_objc_msgForward`函数指针代替 IMP 。最后，执行这个 IMP 。**</font>
 
 
 为了展示消息转发的具体动作，这里尝试向一个对象发送一条错误的消息，并查看一下`_objc_msgForward`是如何进行转发的。
 
 首先开启调试模式、打印出所有运行时发送的消息： 可以在代码里执行下面的方法：
-```
+```objc
 (void)instrumentObjcMessageSends(YES);
 ```
 或者断点暂停程序运行，并在 gdb 中输入下面的命令：
-```
+```objc
 call (void)instrumentObjcMessageSends(YES)
 ```
 以第二种为例，操作如下所示：
-![](https://raw.githubusercontent.com/univer2012/personal-document/master/Pictures/2019/%E3%80%8A%E6%8B%9B%E8%81%98%E4%B8%80%E4%B8%AA%E9%9D%A0%E8%B0%B1%E7%9A%84iOS%E3%80%8B%E9%9D%A2%E8%AF%95%E9%A2%98%E5%8F%82%E8%80%83%E7%AD%94%E6%A1%88(%E4%B8%8B)_3.png)
+![《招聘一个靠谱的iOS》面试题参考答案(下)_3.png](https://upload-images.jianshu.io/upload_images/843214-346c19b54c6b019c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 之后，运行时发送的所有消息都会打印到 `/tmp/msgSend-xxxx` 文件里了。
 
@@ -98,12 +98,12 @@ call (void)instrumentObjcMessageSends(YES)
 ```
 $ open /private/tmp
 ```
-![4](https://raw.githubusercontent.com/univer2012/personal-document/master/Pictures/2019/%E3%80%8A%E6%8B%9B%E8%81%98%E4%B8%80%E4%B8%AA%E9%9D%A0%E8%B0%B1%E7%9A%84iOS%E3%80%8B%E9%9D%A2%E8%AF%95%E9%A2%98%E5%8F%82%E8%80%83%E7%AD%94%E6%A1%88(%E4%B8%8B)_4.png)
+![《招聘一个靠谱的iOS》面试题参考答案(下)_4.png](https://upload-images.jianshu.io/upload_images/843214-b15186f58c1b30ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 可能看到有多条，找到最新生成的，双击打开
 
 在模拟器上执行执行以下语句（这一套调试方案仅适用于模拟器，真机不可用，关于该调试方案的拓展链接： [Can the messages sent to an object in Objective-C be monitored or printed out?](https://stackoverflow.com/questions/10749452/can-the-messages-sent-to-an-object-in-objective-c-be-monitored-or-printed-out/10750398#10750398) ），向一个对象发送一条错误的消息：
-```
+```objc
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "SGHTest.h"
@@ -116,11 +116,12 @@ int main(int argc, char * argv[]) {
     }
 }
 ```
-![5](https://raw.githubusercontent.com/univer2012/personal-document/master/Pictures/2019/%E3%80%8A%E6%8B%9B%E8%81%98%E4%B8%80%E4%B8%AA%E9%9D%A0%E8%B0%B1%E7%9A%84iOS%E3%80%8B%E9%9D%A2%E8%AF%95%E9%A2%98%E5%8F%82%E8%80%83%E7%AD%94%E6%A1%88(%E4%B8%8B)_5.png)
+![《招聘一个靠谱的iOS》面试题参考答案(下)_5.png](https://upload-images.jianshu.io/upload_images/843214-63a36684a5a90de6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 你可以在`/tmp/msgSend-xxxx`（我这一次是`/tmp/msgSends-47869`）文件里，看到打印出来：
-![6](https://raw.githubusercontent.com/univer2012/personal-document/master/Pictures/2019/%E3%80%8A%E6%8B%9B%E8%81%98%E4%B8%80%E4%B8%AA%E9%9D%A0%E8%B0%B1%E7%9A%84iOS%E3%80%8B%E9%9D%A2%E8%AF%95%E9%A2%98%E5%8F%82%E8%80%83%E7%AD%94%E6%A1%88(%E4%B8%8B)_6.png)
-```
+![《招聘一个靠谱的iOS》面试题参考答案(下)_6.png](https://upload-images.jianshu.io/upload_images/843214-08edacff0440225f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+```shell
 - SGHTest NSObject performSelector:
 + SGHTest NSObject resolveInstanceMethod:
 + SGHTest NSObject resolveInstanceMethod:
@@ -188,7 +189,7 @@ typedef void (*voidIMP)(id, SEL, ...)
 > ==“我没有在这个对象里找到这个方法的实现”==
 
 想象下`objc_msgSend`会怎么做？通常情况下，下面这张图就是你正常走`objc_msgSend`过程，和直接调用`_objc_msgForward`的前后差别：
-![](https://raw.githubusercontent.com/univer2012/personal-document/master/Pictures/2019/%E3%80%8A%E6%8B%9B%E8%81%98%E4%B8%80%E4%B8%AA%E9%9D%A0%E8%B0%B1%E7%9A%84iOS%E3%80%8B%E9%9D%A2%E8%AF%95%E9%A2%98%E5%8F%82%E8%80%83%E7%AD%94%E6%A1%88(%E4%B8%8B)_7.gif)
+![《招聘一个靠谱的iOS》面试题参考答案(下)_7.gif](https://upload-images.jianshu.io/upload_images/843214-7209e35fd795ba0b.gif?imageMogr2/auto-orient/strip)
 
 有哪些场景需要直接调用`_objc_msgForward`？最常见的场景是：你想获取某方法所对应的 `NSInvocation` 对象。举例说明：
 
@@ -217,7 +218,7 @@ typedef void (*voidIMP)(id, SEL, ...)
 2. 而如果a是由assign修饰的，则： 在b非nil时，a和b指向同一个内存地址，在b变nil时，a还是指向该内存地址，变野指针。此时向a发送消息极易崩溃。
 
 下面我们将基于`objc_storeWeak(&a, b)`函数，使用伪代码模拟“runtime如何实现weak属性”：
-```
+```objc
 // 使用伪代码模拟：runtime如何实现weak属性
  id obj1;
  objc_initWeak(&obj1, obj);
@@ -231,7 +232,7 @@ typedef void (*voidIMP)(id, SEL, ...)
 下面分别介绍下方法的内部实现：
 
 `objc_initWeak`函数的实现是这样的：在将“附有weak修饰符的变量（obj1）”初始化为0（nil）后，会将“赋值对象”（obj）作为参数，调用`objc_storeWeak`函数。
-```
+```objc
 obj1 = 0；
 obj_storeWeak(&obj1, obj);
 ```
@@ -239,11 +240,11 @@ obj_storeWeak(&obj1, obj);
 > weak 修饰的指针默认值是 nil （在Objective-C中向nil发送消息是安全的）
 
 然后`obj_destroyWeak`函数将0（nil）作为参数，调用`objc_storeWeak`函数。
-```
+```objc
 objc_storeWeak(&obj1, 0);
 ```
 前面的源代码与下列源代码相同。
-```
+```objc
 // 使用伪代码模拟：runtime如何实现weak属性
 id obj1;
 obj1 = 0;
@@ -275,7 +276,7 @@ runloop 和线程的关系：
 
 1、 主线程的run loop默认是启动的。
 iOS的应用程序里面，程序启动后会有一个如下的main()函数
-```
+```objc
 int main(int argc, char * argv[]) {
    @autoreleasepool {
        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
@@ -287,7 +288,7 @@ int main(int argc, char * argv[]) {
 2、对其它线程来说，run loop默认是没有启动的，如果你需要更多的线程交互则可以手动配置和启动，如果线程只是去执行一个长时间的已确定的任务则不需要。
 
 3、在任何一个 Cocoa 程序的线程中，都可以通过以下代码来获取到当前线程的 run loop 。
-```
+```objc
 NSRunLoop *runloop = [NSRunLoop currentRunLoop];
 ```
 参考链接：[《Objective-C之run loop详解》](http://blog.csdn.net/wzzvictory/article/details/9237973)。
@@ -314,7 +315,7 @@ mode 主要是用来指定事件在运行循环中的优先级的，分为：
 同时因为mode还是可定制的，所以：
 
 **Timer计时会被scrollView的滑动影响的问题可以通过将timer添加到`NSRunLoopCommonModes`（`kCFRunLoopCommonModes`）来解决**。 代码如下：
-```
+```objc
 //将timer添加到NSDefaultRunLoopMode中
 NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
 //然后再添加到NSRunLoopCommonModes里
@@ -324,7 +325,7 @@ NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selecto
 ## 31 猜想runloop内部是如何实现的？
 
 一般来讲，一个线程一次只能执行一个任务，执行完成后线程就会退出。如果我们需要一个机制，让线程能随时处理事件但并不退出，通常的代码逻辑 是这样的：
-```
+```objc
 function loop() {
     initialize();
     do {
@@ -334,7 +335,7 @@ function loop() {
 }
 ```
 或使用伪代码来展示下：
-```
+```objc
 int main(int argc, char * argv[]) {
  //程序一直运行状态
  while (AppIsRunning) {
@@ -370,7 +371,7 @@ ARC相对于MRC，不是在编译时添加retain/release/autorelease这么简单
     **Autorelease对象出了作用域之后，会被添加到最近一次创建的自动释放池中，并会在当前的 runloop迭代结束时释放。**
 
 释放的时机总结起来，可以用下图来表示：
-![](https://raw.githubusercontent.com/univer2012/personal-document/master/Pictures/2019/%E3%80%8A%E6%8B%9B%E8%81%98%E4%B8%80%E4%B8%AA%E9%9D%A0%E8%B0%B1%E7%9A%84iOS%E3%80%8B%E9%9D%A2%E8%AF%95%E9%A2%98%E5%8F%82%E8%80%83%E7%AD%94%E6%A1%88(%E4%B8%8B)_8.png)
+![《招聘一个靠谱的iOS》面试题参考答案(下)_8.png](https://upload-images.jianshu.io/upload_images/843214-a47b80eb03abdfe4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 下面对这张图进行详细的解释：
 
