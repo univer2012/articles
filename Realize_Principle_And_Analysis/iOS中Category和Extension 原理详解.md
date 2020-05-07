@@ -35,15 +35,17 @@ typedef struct category_t {
 
 但是为什么网上很多人都说Category不能添加属性呢？
 
-**Category实际上是允许添加属性的，同样可以使用`@property`。但是不会生成`_变量`（带下划线的成员变量），也不会生成添加属性的getter和setter方法的实现**。所以，<u>尽管添加了属性，也无法使用点语法调用getter和setter方法</u>（实际上，点语法是可以写的，只不过在运行时调用到这个方法时候会报方法找不到的错误，如下图）。但<font color=#038103>**实际上可以使用runtime去实现Category，为已有的类添加新的属性，并生成getter和setter方法**</font>。详细内容可以看峰哥之前的文章：[《iOS Runtime之四：关联对象》](
+**Category实际上是允许添加属性的，同样可以使用`@property`。但是不会生成`_变量`（带下划线的成员变量），也不会生成添加属性的getter和setter方法的实现**。所以，<u>尽管添加了属性，也无法使用点语法调用getter和setter方法</u>（实际上，点语法是可以写的，只不过在运行时调用到这个方法时候会报方法找不到的错误，如下图）。但<font color=#038103>**实际上可以使用runtime去实现Category，为已有的类添加新的属性，并生成getter和setter方法**</font>。详细内容可以看峰哥之前的文章：[《iOS Runtime之四：关联对象》](http://www.imlifengfeng.com/blog/?p=397)
+
+
 
 ---
 
 
 
-**（一）Category**
+#（一）Category
 
-**1、什么是Category?**
+### 1、什么是Category?**
 
 category是Objective-C 2.0之后添加的语言特性，别人口中的分类、类别其实都是指的category。category的主要作用是为已经存在的类添加方法。除此之外，apple还推荐了category的另外两个使用场景。
 
@@ -62,7 +64,7 @@ apple 的SDK中就大面积的使用了category这一特性。比如UIKit中的U
 - 模拟多继承（另外可以模拟多继承的还有protocol）
 - 把framework的私有方法公开
 
-**2、category特点**
+### 2、category特点
 
 - category只能给某个已有的类扩充方法，不能扩充成员变量。
 - **category中也可以添加属性，只不过`@property`只会生成setter和getter的声明，不会生成setter和getter的实现以及成员变量**。
@@ -105,13 +107,13 @@ UIView+two
 
 调用结果
 
-**3、调用优先级**
+### 3、调用优先级
 
 **分类(category) > 本类 > 父类**。即，优先调用cateory中的方法，然后调用本类方法，最后调用父类方法。
 
 注意：category是在运行时加载的，不是在编译时。
 
-**4、为什么category不能添加成员变量？**
+### 4、为什么category不能添加成员变量？
 
 Objective-C类是由Class类型来表示的，它实际上是一个指向objc_class结构体的指针。它的定义如下：
 
@@ -140,7 +142,7 @@ struct objc_class {
 
 在上面的objc_class结构体中，`ivars`是`objc_ivar_list`（成员变量列表）指针；`methodLists`是指向`objc_method_list`指针的指针。<font color=#FF0000>**在Runtime中，`objc_class`结构体大小是固定的，不可能往这个结构体中添加数据，只能修改。所以，`ivars`指向的是一个固定区域，只能修改成员变量值，不能增加成员变量个数**</font>。**`methodLists`是一个二维数组，所以可以修改`*methodLists`的值来增加成员方法。虽没办法扩展methodLists指向的内存区域，却可以改变这个内存区域的值（存储的是指针）**。因此，可以动态添加方法，不能添加成员变量。
 
-**5、category中能添加属性吗？**
+### 5、category中能添加属性吗？
 
 Category不能添加成员变量（instance variables），那到底能不能添加属性（property）呢？
 
@@ -180,13 +182,13 @@ typedef struct category_t {
 - 1)、category的方法没有“完全替换掉”原来类已经有的方法，也就是说如果category和原来类都有methodA，那么category附加完成之后，类的方法列表里会有两个methodA。
 - 2)、**category的方法被放到了新方法列表的前面，而原来类的方法被放到了新方法列表的后面，这就是我们平常所说的，category的方法会“覆盖”掉原来类的同名方法。这是因为，运行时在查找方法的时候，是顺着<u>方法列表的顺序</u>查找的。它只要一找到对应名字的方法，就会罢休，殊不知后面可能还有一样名字的方法。**
 
-**（二）Extension**
+# （二）Extension
 
-**1、 什么是extension**
+### 1、 什么是extension
 
 extension被开发者称之为扩展、延展、匿名分类。extension看起来很像一个匿名的category，但是extension和category几乎完全是两个东西。和category不同的是，**extension不但可以声明方法，还可以声明属性、成员变量。extension一般用于声明私有方法，私有属性，私有成员变量**。
 
-**2、 extension的存在形式**
+### 2、 extension的存在形式
 
 **category是拥有.h文件和.m文件的东西**。但是extension不然。**extension只存在于一个.h文件中，或者extension只能寄生于一个类的.m文件中**。比如，viewController.m文件中通常寄生这么个东西，其实这就是一个extension：
 
@@ -216,7 +218,7 @@ UIView_extension.h中声明方法：
 
 注意：extension常用的形式并不是以一个单独的.h文件存在，而是寄生在类的.m文件中。
 
-**（三）category和extension的区别**
+# （三）category和extension的区别
 
 就category和extension的区别来看，我们可以推导出一个明显的事实，extension可以添加实例变量，而category是无法添加实例变量的（因为在运行期，对象的内存布局已经确定，如果添加实例变量就会破坏类的内部布局，这对编译型语言来说是灾难性的）。
 
