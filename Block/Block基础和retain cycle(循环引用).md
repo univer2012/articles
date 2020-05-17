@@ -25,20 +25,20 @@ Block的使用很像函数指针，**不过与函数最大的不同是：Block�
 
 ## 1.2 block基本语法
 ### 1.2.1如何定义block变量
-```
+```objc
 //第一个block是一个int类型的返回值，并且有2个参数
     //第二个block是没有返回值，没有参数的block
     int (^sumBlock)(int, int);
     void (^myBlock)();
 ```
 ### 1.2.2 如何使用block来封装代码
-```
+```objc
 //最基本的用法
     int (^sumBlock)(int, int) = ^(int a, int b) {
         return a - b;
     };
 ```
-```
+```objc
 //1.宏定义一个block
     typedef int (^MyBlock)(int, int);
     //2.利用宏定义来定义变量
@@ -58,12 +58,12 @@ Block的使用很像函数指针，**不过与函数最大的不同是：Block�
 ```
 
 ### 1.2.3 如何调用block
-```
+```objc
 NSLog(@"%d - %d - %d", multiplyBlock(2, 4), sumBlock(10, 9), minusBlock(10,8));
     //这个依次输出是 8,19,2
 ```
 ### 1.2.4 block可以访问外部变量
-```
+```objc
 int a = 10;
     //给局部变量加上__block之后就可以改变b局部变量的值,将取变量此刻运行时的值
     __block int b = 2;
@@ -95,7 +95,7 @@ block内存中的三个位置 `NSGlobalBlock`，`NSStackBlock`, `NSMallocBlock`
 * `NSStackBlock` : 栈内存，函数返回后Block将无效
 * `NSMallocBlock` : 堆内存
 
-```
+```objc
 //宏定义一个block
         typedef long (^BlockSum)(int, int);
         BlockSum block1 =^long(int a,int b){
@@ -121,7 +121,7 @@ block内存中的三个位置 `NSGlobalBlock`，`NSStackBlock`, `NSMallocBlock`
 
 上述中为什么block1在NSGlobalBlock中，block2在NSStackBlock(mrc)，NSMallocBlock(arc)中？因为block2用到了外部变量base，需要建立局部变量的快照，所以在(定义，不是运行)局部变量被拷贝到栈上(mrc)，堆（arc）上。
 
-```
+```objc
 typedef long (^BlockSum)(int, int);
         int base = 2;
         base += 2;
@@ -145,47 +145,48 @@ typedef long (^BlockSum)(int, int);
 
 
 测试代码如下：
-```
+```objc
 //宏定义一个block
-        typedef long (^BlockSum)(int, int);
-        //<__NSGlobalBlock__: 0x1000020b0>
-        BlockSum block1 =^long(int a,int b){
-            return a + b;
-        };
-        NSLog(@"block1: %lu", (unsigned long)[block1 retainCount]);
-        BlockSum tempBlock1 = [block1 retain];
-        NSLog(@"block1_retain: %lu", (unsigned long)[block1 retainCount]);
-        BlockSum tempBlock12 = [block1 copy];
-        NSLog(@"block1_copy: %lu", (unsigned long)[block1 retainCount]);
-        [block1 release];
-        NSLog(@"block1_release: %lu", (unsigned long)[block1 retainCount]);
-        NSLog(@"NSGlobalBlock: %@, retain: %@, copy: %@",block1, tempBlock1, tempBlock12);
+typedef long (^BlockSum)(int, int);
 
-        //MRC: <__NSStackBlock__: 0x7fff5698b070>
-        int base = 100;
-        BlockSum block2 = ^long(int a, int b) {
-            return base + a + b;
-        };
-        NSLog(@"block2: %lu", (unsigned long)[block2 retainCount]);
-        BlockSum tempBlock2 = [block2 retain];
-        NSLog(@"block2_retain: %lu", (unsigned long)[block2 retainCount]);
-        [block2 release];
-        NSLog(@"block2_release: %lu", (unsigned long)[block2 retainCount]);
+// <__NSGlobalBlock__: 0x1000020b0>
+BlockSum block1 =^long(int a,int b){
+    return a + b;
+};
+NSLog(@"block1: %lu", (unsigned long)[block1 retainCount]);
+BlockSum tempBlock1 = [block1 retain];
+NSLog(@"block1_retain: %lu", (unsigned long)[block1 retainCount]);
+BlockSum tempBlock12 = [block1 copy];
+NSLog(@"block1_copy: %lu", (unsigned long)[block1 retainCount]);
+[block1 release];
+NSLog(@"block1_release: %lu", (unsigned long)[block1 retainCount]);
+NSLog(@"NSGlobalBlock: %@, retain: %@, copy: %@\n\n",block1, tempBlock1, tempBlock12);
+
+//MRC: <__NSStackBlock__: 0x7fff5698b070>
+int base = 100;
+BlockSum block2 = ^long(int a, int b) {
+    return base + a + b;
+};
+NSLog(@"block2: %lu", (unsigned long)[block2 retainCount]);
+BlockSum tempBlock2 = [block2 retain];
+NSLog(@"block2_retain: %lu", (unsigned long)[block2 retainCount]);
+[block2 release];
+NSLog(@"block2_release: %lu\n\n", (unsigned long)[block2 retainCount]);
 
 
 
-        //<__NSMallocBlock__: 0x10051cf60>
-        BlockSum block3 = [block2 copy];
-        NSLog(@"NSStackBlock: %@, retain: %@, copy: %@", block2, tempBlock2, block3);
+// <__NSMallocBlock__: 0x10051cf60>
+BlockSum block3 = [block2 copy];
+NSLog(@"NSStackBlock: %@, retain: %@, copy: %@", block2, tempBlock2, block3);
 
-        NSLog(@"block3: %lu", (unsigned long)[block3 retainCount]);
-        BlockSum tempBlock3 = [block3 retain];
-        NSLog(@"block3_retain: %lu", (unsigned long)[block3 retainCount]);
-        BlockSum tempBlock31 = [block3 copy];
-        NSLog(@"block3_copy: %lu", (unsigned long)[block3 retainCount]);
-        [block3 release];
-        NSLog(@"block3_release: %lu", (unsigned long)[block3 retainCount]);
-        NSLog(@"NSMallocBlock: %@, retain: %@, copy: %@", block3, tempBlock3, tempBlock31);
+NSLog(@"block3: %lu", (unsigned long)[block3 retainCount]);
+BlockSum tempBlock3 = [block3 retain];
+NSLog(@"block3_retain: %lu", (unsigned long)[block3 retainCount]);
+BlockSum tempBlock31 = [block3 copy];
+NSLog(@"block3_copy: %lu", (unsigned long)[block3 retainCount]);
+[block3 release];
+NSLog(@"block3_release: %lu", (unsigned long)[block3 retainCount]);
+NSLog(@"NSMallocBlock: %@, retain: %@, copy: %@\n\n", block3, tempBlock3, tempBlock31);
 ```
 
 输出如下：
@@ -208,7 +209,7 @@ block1: 1
 
 ## 1.6 Block不同类型的变量
 ### 1.6.1 static 和基本数据类型
-```
+```objc
 //宏定义一个block
         typedef long (^BlockSum)(int, int);
         //1.static int
@@ -237,7 +238,7 @@ block1: 1
 所以static输出的是 3 ，基本数据类型是 103
 
 ### 1.6.2 static变量 如果block中也有变量的时候
-```
+```objc
 //宏定义一个block
         typedef long (^BlockSum)(int, int);
         //1.static int
@@ -259,7 +260,7 @@ block1: 1
 * BlockA被BlockB使用时，BlockB被copy到堆上，被使用的BlockA也会被copy。但作为参数的Block是不会发生copy的；
 * ARC的block所有的都在堆上。
 * MRC的看下边的实例：
-```
+```objc
 //宏定义一个block
 typedef long (^BlockSum)(int, int);
 
@@ -298,7 +299,7 @@ int main(int argc, char * argv[]) {
 ```
 
 ### 1.6.3 ObjC对象，不同于基本类型，Block会引起对象的引用计数变化
-```
+```objc
 @interface MyClass:NSObject {
     NSObject *_instanceObj;
 }
@@ -372,7 +373,7 @@ blockObj在Block copy时也不会retain。
 ### 1.6.4 **非ObjC对象**，如GCD队列dispatch_queue_t。**Block copy时并不会自动增加他的引用计数**，这点要非常小心。
 
 ### 1.6.5 Block中使用的ObjC对象的行为
-```
+```objc
 @property (nonatomic, copy) void(^myBlock)(void);
 //...
 MyClass* obj = [[[MyClass alloc] init] autorelease];
@@ -384,7 +385,7 @@ self.myBlock = ^ {
 对象obj在Block被copy到堆上的时候自动retain了一次。**因为Block不知道obj什么时候被释放，为了不在Block使用obj前被释放，Block retain了obj一次。在Block被释放的时候，obj被release一次。**
 
 ## 1.7 retain cycle(循环引用的问题)
-```
+```objc
 ASIHTTPRequest *request = [ASIHTTPRequest  requestWithURL:url];
 [request setCompletionBlock:^{
     NSString* string = [request responseString];
@@ -393,7 +394,7 @@ ASIHTTPRequest *request = [ASIHTTPRequest  requestWithURL:url];
 在上边这个实例中request和Block循环引用，所以我们只需要打断其中的循环即可。
 
 解决这个问题的办法是使用弱引用打断retain cycle：
-```
+```objc
 __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
 [request setCompletionBlock:^{
     NSString* string = [request responseString];
@@ -402,7 +403,7 @@ __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
 request被持有者释放后，request 的retainCount变成0，request被dealloc，request释放持有的Block，导致Block的retainCount变成0，也被销毁。这样这两个对象内存都被回收。
 
 与上面情况类似的是：
-```
+```objc
 @interface ViewController ()
 //报错: This block declaration is not a prototype
 //@property(nonatomic)void(^myBlock)();
@@ -439,7 +440,7 @@ request被持有者释放后，request 的retainCount变成0，request被dealloc
 ```
 
 ### 1.7.1 retain cycle不只发生在两个对象之间，也可能发生在多个对象之间，这样问题更复杂，更难发现。
-```
+```objc
 @interface ClassA : NSObject
 @property(nonatomic, copy)void(^myBlock)(void);
 @end
@@ -466,7 +467,7 @@ request被持有者释放后，request 的retainCount变成0，request被dealloc
 ```
 
 解决办法同样是用__block打破循环引用：
-```
+```objc
 ClassA *objA = [[[ClassA alloc] init] autorelease];
     /*Cannot create __weak reference in file using manual reference counting
      在使用MRC的文件中，不能创建__weak引用计数 */

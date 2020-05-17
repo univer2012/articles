@@ -1,4 +1,4 @@
-来自：[iOS-Block本质](https://www.jianshu.com/p/4e79e9a0dd82)
+n来自：[iOS-Block本质](https://www.jianshu.com/p/4e79e9a0dd82)
 
 
 
@@ -10,15 +10,21 @@
 
 #### Q：什么是Block，Block的本质是什么？
 
-- block本质上也是一个OC对象，它内部也有个isa指针
-- block是封装了函数调用以及函数调用环境的OC对象
-- block是封装函数及其上下文的OC对象
+- block本质上也是一个OC对象，它<u>内部也有个isa指针</u>
+- block是**封装了<u>函数调用</u>以及<u>函数调用环境</u>的OC对象**
+- block是<u>封装函数及其上下文的OC对象</u>
 
 ![img](https:////upload-images.jianshu.io/upload_images/1915113-71d81fe282e2a41d.png?imageMogr2/auto-orient/strip|imageView2/2/w/541)
 
 block底层结构图
 
 查看block源码：
+
+> reserved [rɪˈzɜːvd] adj. 保留的，预订的；缄默的，冷淡的，
+>
+> descriptor [dɪˈskrɪptə(r)]  n.描述符号
+>
+> variables ['vɛrɪəbl] n. 【数】变量
 
 ```objc
 struct __block_impl {
@@ -73,6 +79,8 @@ int main(int argc, const char * argv[]) {
 - __main_block_desc_0 ：block描述信息
 - Block_size：block的大小
 
+
+
 ## 第二部分：Block捕获变量
 
 #### Q：下述代码输出值为多少？
@@ -103,7 +111,7 @@ Block();
 ```
 
 输出结果为：age:10,num:11
- 愿意：**auto变量block访问方式是值传递，static变量block访问方式是指针传递**
+ 愿意：**auto变量<u>block访问方式是</u>值传递，static变量<u>block访问方式是</u>指针传递**
  源码证明：
 
 ```objc
@@ -115,7 +123,7 @@ NSLog((NSString *)&__NSConstantStringImpl__var_folders_2r__m13fp2x2n9dvlr8d68yry
 int age = 10;
 static int num = 25;
 
-block = ((void (*)())&__test_block_impl_0((void *)__test_block_func_0, &__test_block_desc_0_DATA, age, &num));
+block = ((void (*)())&__test_block_impl_0((void *)__test_block_func_0, &__test_block_desc_0_DATA, age, &num)); //一个直接用`age`，一个是 用`&num`，&是取地址符
 
 age = 20;
 num = 11;
@@ -125,7 +133,7 @@ num = 11;
 
 #### Q：为什么block对auto和static变量捕获有差异？
 
-**auto自动变量可能会销毁，内存可能会消失，不采用指针访问**；<u>static变量一直保存在内存中，指针访问即可</u>
+**auto变量可能会被销毁，内存可能会被回收，所以<u>不采用指针访问</u>**；<u>static变量一直保存在内存中，指针访问即可</u>
 
 #### Q：block对全局变量的捕获方式是？
 
@@ -176,13 +184,13 @@ NSLog(@"%@",[[[[block1 class] superclass] superclass] superclass]);
 NSLog(@"%@",[[[[[block1 class] superclass] superclass] superclass] superclass]);
 ```
 
-```
 输出结果：
-NSGlobalBlock
-__NSGlobalBlock
-NSBlock
-NSObject
-null
+```
+08:35:59.670147+0800 ObjectiveCDemo20200321[10472:516399] __NSGlobalBlock__
+08:35:59.670546+0800 ObjectiveCDemo20200321[10472:516399] __NSGlobalBlock
+08:35:59.670748+0800 ObjectiveCDemo20200321[10472:516399] NSBlock
+08:35:59.670899+0800 ObjectiveCDemo20200321[10472:516399] NSObject
+08:35:59.671065+0800 ObjectiveCDemo20200321[10472:516399] (null)
 ```
 
 上述代码输出了**block1的类型**，也**证实了block是对象，最终继承NSObject**
@@ -224,17 +232,25 @@ block内存分配
 
 #### Q：如何判断block是哪种类型？
 
-- 没有访问auto变量的block是__NSGlobalBlock __ ，放在数据段
-- 访问了auto变量的block是__NSStackBlock __
-- `[__NSStackBlock __ copy]`操作就变成了__NSMallocBlock __
+- 没有访问auto变量的block是`__NSGlobalBlock __ `，放在数据段
+- MRC模式下，访问了auto变量的block是`__NSStackBlock __` ；ARC模式下，访问了auto变量的block是`__NSMallocBlock __` ；
+- `[__NSStackBlock __ copy]`操作就变成了`__NSMallocBlock __` 。
 
 #### Q：对每种类型block调用copy操作后是什么结果？
 
-- __NSGlobalBlock __ 调用copy操作后，什么也不做
-- __NSStackBlock __ 调用copy操作后，复制效果是：从栈复制到堆；副本存储位置是**堆**
-- __NSMallocBlock __ 调用copy操作后，复制效果是：引用计数增加；副本存储位置是**堆**
+- ~~`__NSGlobalBlock __` 调用copy操作后，什么也不做~~
 
-#### Q：在ARC环境下，编译器会根据情况自动将栈上的block复制到堆上的几种情况？
+- ~~`__NSStackBlock __` 调用copy操作后，复制效果是：从栈复制到堆；副本存储位置是**堆**~~
+
+- ~~`__NSMallocBlock __` 调用copy操作后，复制效果是：引用计数增加；副本存储位置是**堆**~~
+
+  更新：
+
+  1. `__NSGlobalBlock__` 调用copy操作后，复制效果是：copy后的对象，指针指向原GlobalBlock，引用计数不变。
+  2. `__NSStackBlock__`  调用copy操作后，复制效果是：从栈复制到堆；副本存储位置是「堆」。
+  3. `__NSMallocBlock__` 调用copy操作后，复制效果是：copy后的对象，指针指向原MallocBlock，引用计数不变。效果跟NSString的copy操作效果一样。
+
+#### Q：在ARC环境下，编译器会根据情况自动将栈上的block复制到堆上的几种情况？「备注：没法验证」
 
 - 1.block作为函数返回值时
 - 2.将block赋值给__strong指针时
@@ -249,23 +265,35 @@ block内存分配
 
 ## 第四部分：对象类型的auto变量
 
-#### Q：ARC下述代码中Person对象是否会释放？
+#### Q：~~ARC下述代码中Person对象是否会释放？~~「备注：代码有问题，无法得出正确答案」
 
 示例代码：
 
 ```objc
+@implementation SGHARCBlockViewController
+
+
 typedef void(^XBTBlock)(void);
-XBTBlock block;
-{
-    Person *p = [[Person alloc] init];
+XBTBlock btBlock;
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+  
+    [self demo5_0];
+}
+- (void)demo5_0 {
+    
+    SGHBlockPerson *p = [[SGHBlockPerson alloc] init];
     p.age = 10;
     
-    block = ^{
-        NSLog(@"======= %d",p.age);
+    btBlock = ^{
+        NSLog(@"======= %ld",(long)p.age);
     };
+    
+    NSLog(@"%@, p_retainCount: %ld",btBlock, (long)CFGetRetainCount((__bridge  CFTypeRef)p));
 }
 
-Person.m
+///Person.m
 - (void)dealloc{
     NSLog(@"Person - dealloc");
 }
@@ -288,13 +316,133 @@ struct __main_block_impl_0 {
 };
 ```
 
-上述
- block为堆block，block里面有一个Person指针，Person指针指向Person对象。只要block还在，Person就还在。block强引用了Person对象。
+上述block为堆block，block里面有一个Person指针，Person指针指向Person对象。只要block还在，Person就还在。block强引用了Person对象。
 
-#### Q：上述代码改换成MRC，Person对象会释放么？
+#### Q：~~上述代码改换成MRC，Person对象会释放么？~~「备注：代码有问题，无法得出正确答案」
 
-会的！
- 堆空间的block会对Person对象retain操作，拥有一次Person对象。
+示例代码：
+
+```objc
+@implementation SGHMRCBlockViewController
+
+typedef void(^XBTBlock)(void);
+XBTBlock btBlock2;
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self demo5_0];
+}
+
+- (void)demo5_0 {
+    
+    SGHBlockPerson *p = [[SGHBlockPerson alloc] init];
+    p.age = 10;
+    
+    btBlock2 = ^{
+        NSLog(@"======= %ld",(long)p.age);
+    };
+    
+    NSLog(@"%@",btBlock2);
+    
+    [p release]; //手动释放p
+}
+```
+
+
+
+答：会的！NSStackBlock 不会持有p对象，p对象需要手动 `release` 。因为p执行了 `release` 操作，所以会打印出 Person - dealloc 。
+
+
+
+
+
+## 扩展疑问：下面代码在MRC和ARC的打印，为什么？
+
+MRC:
+
+```objc
+@implementation SGHMRCBlockViewController
+
+
+typedef void(^XBTBlock)(void);
+
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+  	[self demo5];
+}
+- (void)demo5 {
+    XBTBlock btBlock2;
+    SGHBlockPerson *p = [[SGHBlockPerson alloc] init];
+    p.age = 10;
+    
+    btBlock2 = ^{
+        NSLog(@"======= %ld",(long)p.age);
+    };
+    btBlock2();
+    NSLog(@"%@, p_retainCount: %ld",btBlock2,[p retainCount]);
+}
+
+
+//SGHBlockPerson.m
+@implementation SGHBlockPerson
+
+- (void)dealloc{
+    NSLog(@"Person - dealloc");
+}
+
+@end
+```
+
+打印：
+
+```
+[12255:610753] ======= 10
+[12255:610753] <__NSStackBlock__: 0x7ffee8c3f7b8>, p_retainCount: 1
+```
+
+解答：因为StackBlock不会持有对象p，所以p对象的引用计数一直是1。又因为在MRC下，p对象需要手动释放，所以不会调用 `dealloc` 打印 Person - dealloc 。
+
+
+
+ARC:
+
+```objc
+@implementation SGHARCBlockViewController
+
+
+typedef void(^XBTBlock)(void);
+
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+  	[self demo5];
+}
+- (void)demo5 {
+    XBTBlock btBlock;
+    SGHBlockPerson *p = [[SGHBlockPerson alloc] init];
+    p.age = 10;
+    
+    btBlock = ^{
+        NSLog(@"======= %ld",(long)p.age);
+    };
+    btBlock();
+    NSLog(@"%@, p_retainCount: %ld",btBlock, (long)CFGetRetainCount((__bridge  CFTypeRef)p));
+}
+```
+
+打印：
+
+```
+[12255:610753] ======= 10
+[12255:610753] <__NSMallocBlock__: 0x6000034b2070>, p_retainCount: 3
+[12255:610753] Person - dealloc
+```
+
+解答：因为MallocBlock会持有对象p，且 MallocBlock对象 和 p对象 都是是局部变量。当这个方法执行完成后，MallocBlock对象会被释放掉，此时对象p也会跟着被释放掉。
+
+
 
 #### Q：下列代码中Person是否会被释放？
 
@@ -318,31 +466,112 @@ struct __main_block_impl_0 {
 
 ### 小结
 
-无论MRC还是ARC，栈空间上的block，不会持有对象；堆空间的block，会持有对象。
+无论MRC还是ARC，<font color=#FF0000>**栈空间上的block，不会持有对象；堆空间的block，会持有对象。**</font>
+
+#### 验证：
+
+ARC代码：
+
+```objc
+- (void)demo5_2 {
+    typedef void(^XBTBlock)(void);
+    XBTBlock btBlock;
+    
+    SGHBlockPerson *p = [[SGHBlockPerson alloc] init];
+    p.age = 10;
+    
+    NSLog(@"retainCount:%ld", (long)CFGetRetainCount((__bridge  CFTypeRef)p));  //retainCount:1
+    btBlock = ^{
+        NSLog(@"======= %ld",(long)p.age);
+    };
+    
+    NSLog(@"%@",btBlock);
+    
+    //测试：MallocBlock 是否会持有p
+    NSLog(@"retainCount:%ld", (long)CFGetRetainCount((__bridge  CFTypeRef)p));
+    btBlock = nil;
+    NSLog(@"p:%@, retainCount:%ld", p, (long)CFGetRetainCount((__bridge  CFTypeRef)p));
+}
+```
+
+执行打印如下：
+
+```
+retainCount:1
+<__NSMallocBlock__: 0x6000025435a0>
+retainCount:3
+p:<SGHBlockPerson: 0x6000029d1b10>, retainCount:2
+Person - dealloc
+```
+
+结论：**说明 MallocBlock 会持有对象p。**
+
+
+
+MRC代码：
+
+```objc
+- (void)demo5_2 {
+    typedef void(^XBTBlock)(void);
+    XBTBlock btBlock2;
+    
+    
+    SGHBlockPerson *p = [[SGHBlockPerson alloc] init];
+    p.age = 10;
+    
+    btBlock2 = ^{
+        NSLog(@"======= %ld",(long)p.age);
+    };
+    NSLog(@"%@",btBlock2);
+    
+    
+    //测试：StackBlock 是否会持有p
+    NSLog(@"retainCount:%ld", [p retainCount]);
+    btBlock2 = nil;
+    NSLog(@"p:%@, retainCount:%ld", p, [p retainCount]);
+}
+```
+
+执行打印如下：
+
+```
+<__NSStackBlock__: 0x7ffeeb8dc7b8>
+retainCount:1
+p:<SGHBlockPerson: 0x6000029d1c60>, retainCount:1
+```
+
+结论：**说明 StackBlock 不会持有对象p 。**
+
+
 
 #### Q：当block内部访问了对象类型的auto变量时，是否会强引用？
 
 答案：分情况讨论，分为栈block和堆block
 
-**栈block**
- a) 如果block是在栈上，将不会对auto变量产生强引用
- b) 栈上的block随时会被销毁，也没必要去强引用其他对象
+##### 一、栈block
+ 如果block是在栈上，将不会对auto变量产生强引用。栈上的block随时会被销毁，也没必要去强引用其他对象。
 
-**堆block**
- 1.如果block被拷贝到堆上：
- a) 会调用block内部的copy函数
- b) copy函数内部会调用_Block_object_assign函数
- c) _Block_object_assign函数会根据auto变量的修饰符（`__strong、__weak、__unsafe_unretained`）做出相应的操作，形成强引用（retain）或者弱引用
+##### 二、堆block
+1. 如果block被拷贝到堆上：
+    a) 会调用block内部的copy函数，
+    b) copy函数内部会调用`_Block_object_assign`函数，
+    c) `_Block_object_assign` 函数会根据auto变量的修饰符（`__strong、__weak、__unsafe_unretained`）做出相应的操作，形成强引用（retain）或者弱引用。
 
-2.如果block从堆上移除
- a) 会调用block内部的dispose函数
- b) dispose函数内部会调用_Block_object_dispose函数
- c) _Block_object_dispose函数会自动释放引用的auto变量（release）
+2. 如果block从堆上移除：
+    a) 会调用block内部的dispose函数
+    b) dispose函数内部会调用`_Block_object_dispose` 函数
+    c) ` _Block_object_dispose` 函数会自动释放引用的auto变量（release）
 
 正确答案：
 
 - 如果block在`栈`空间，不管外部变量是强引用还是弱引用，block都会弱引用访问对象
 - 如果block在`堆`空间，如果外部强引用，block内部也是强引用；如果外部弱引用，block内部也是弱引用
+
+
+
+---
+
+
 
 #### Q：__weak 在使用clang转换OC为C++代码时，可能会遇到以下问题`cannot create __weak reference in file using manual reference`
 
@@ -353,11 +582,11 @@ struct __main_block_impl_0 {
 
 ```objc
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    Person *person = [[Person alloc] init];
+    SGHBlockPerson *person = [[SGHBlockPerson alloc] init];
     person.age = 10;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSLog(@"age:%d",person.age);
+        NSLog(@"age:%ld",(long)person.age);
     });
     
     NSLog(@"touchesBegan");
@@ -379,14 +608,14 @@ struct __main_block_impl_0 {
 ```objc
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 
-    Person *person = [[Person alloc] init];
+    SGHBlockPerson *person = [[SGHBlockPerson alloc] init];
     person.age = 10;
     
-    __weak Person *weakPerson = person;
+    __weak SGHBlockPerson *weakPerson = person;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSLog(@"age:%p",weakPerson);
+        NSLog(@"age:%ld",(long)weakPerson.age);
     });
-
+    
     NSLog(@"touchesBegan");
 }
 ```
@@ -396,20 +625,20 @@ struct __main_block_impl_0 {
 ```
 14:38:42.996990+0800 test[1104:347260] touchesBegan
 14:38:42.997481+0800 test[1104:347260] Person-dealloc
-14:38:44.997136+0800 test[1104:347260] age:0x0
+14:38:44.997136+0800 test[1104:347260] age:0
 ```
 
-原因：使用__weak修饰过后的对象，堆block会采用弱引用，无法延时Person的寿命，所以在touchesBegan函数结束后，Person就会被释放，gcd就无法捕捉到Person。
+原因：使用`__weak`修饰过后的对象，堆block会采用弱引用，无法延时Person的寿命，所以在touchesBegan函数结束后，Person就会被释放，gcd就无法捕捉到Person。
 
 #### Q3：如果gcd内包含gcd，Person会什么时候释放？
 
 ```objc
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 
-    Person *person = [[Person alloc] init];
+    SGHBlockPerson *person = [[SGHBlockPerson alloc] init];
     person.age = 10;
     
-    __weak Person *weakPerson = person;
+    __weak SGHBlockPerson *weakPerson = person;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4.0 * NSEC_PER_SEC)),
                    dispatch_get_main_queue(), ^{
                        
@@ -432,17 +661,17 @@ struct __main_block_impl_0 {
 14:48:08.583129+0800 test[1199:403589] Person-dealloc
 ```
 
-原因：gcd内部只要有强引用Person，Person就会等待执行完再销毁！所以Person销毁时间为7秒。
+原因：**gcd内部只要有强引用Person，Person就会等待执行完再销毁！**所以Person销毁时间为7秒。
 
 #### Q4：如果gcd内部先强引用后弱引用，Person什么时候释放？
 
 ```objc
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 
-    Person *person = [[Person alloc] init];
+    SGHBlockPerson *person = [[SGHBlockPerson alloc] init];
     person.age = 10;
     
-    __weak Person *weakPerson = person;
+    __weak SGHBlockPerson *weakPerson = person;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4.0 * NSEC_PER_SEC)),
                    dispatch_get_main_queue(), ^{
                        
@@ -465,7 +694,7 @@ struct __main_block_impl_0 {
 14:52:36.418204+0800 test[1249:431302] 2-----age:0x0
 ```
 
-原因：Person会等待强引用执行完毕后释放，只要强引用执行完，就不会等待后执行的弱引用，会直接释放的，所以Person释放时间为4秒。
+原因：Person会等待强引用执行完毕后释放，只要强引用执行完，就不会等待后执行的弱引用，会直接释放。所以Person释放时间为4秒。
 
 ## 第五部分：__block修饰符
 
@@ -481,7 +710,7 @@ auto修饰变量，block无法修改，因为block使用的时候是内部创建
 
 #### Q：`__block` int age = 10，系统做了哪些？
 
-答案：编译器会将__block变量包装成一个对象
+答案：**编译器会将`__block`变量包装成一个对象。**
  查看c++源码：
 
 ```objc
@@ -496,11 +725,11 @@ __Block_byref_age_0 *__forwarding;//age的地址
 
 #### Q：__block 修饰符作用？
 
-- __block可以用于解决block内部无法修改auto变量值的问题
+- __block可以**用于解决block内部，无法修改auto变量值的问题。**
 - __block不能修饰全局变量、静态变量（static）
-- 编译器会将__block变量包装成一个对象
-- __block修改变量：`age->__forwarding->age`
-- __Block_byref_age_0结构体内部地址和外部变量age是同一地址
+- **编译器会将`__block`变量包装成一个对象。**
+- `__block`修改变量：age -> `__forwarding`-> age
+- `__Block_byref_age_0`结构体内部地址和外部变量age是同一地址。
 
 ![img](https:////upload-images.jianshu.io/upload_images/1915113-bb96bba3f22f9d57.png?imageMogr2/auto-orient/strip|imageView2/2/w/376)
 
@@ -521,7 +750,7 @@ Block block = ^{
 
 #### 5.1  `__block`的内存管理
 
-当block在栈上时，并不会对__block变量产生强引用
+**当block在栈上时，并不会对`__block`变量产生强引用。**
 
 #### Q：block的属性修饰词为什么是copy？
 
@@ -631,40 +860,50 @@ __forwarding指向
 ##### 1.第一种方式：__weak
 
 ```objc
-Person *person = [[Person alloc] init];
-//        __weak Person *weakPerson = person;
-__weak typeof(person) weakPerson = person;
+- (void)sec3demo1 {
+    SGHBlockPerson *person = [[SGHBlockPerson alloc] init];
+//    __weak SGHBlockPerson *weakPerson = person;
+    __weak typeof(person) weakPerson = person;
 
-person.block = ^{
-    NSLog(@"age is %d", weakPerson.age);
-};
+    person.block = ^{
+        NSLog(@"age is %ld", (long)weakPerson.age);
+    };
+    person.block();
+}
 ```
 
 ##### 2.第二种方式：__unsafe_unretained
 
 ```objc
-__unsafe_unretained Person *person = [[Person alloc] init];
-person.block = ^{
-    NSLog(@"age is %d", weakPerson.age);
-};
+- (void)sec3demo2 {
+    SGHBlockPerson *person = [[SGHBlockPerson alloc] init];
+    __unsafe_unretained  typeof(person) tPerson = person;
+    person.block = ^{
+        NSLog(@"age is %ld", (long)tPerson.age);
+    };
+    person.block();
+}
 ```
 
 ##### 3.第三种方式：__block
 
 ```objc
-__block Person *person = [[Person alloc] init];
-person.block = ^{
-    NSLog(@"age is %d", person.age);
-    person = nil;
-};
-person.block();
+- (void)sec3demo3 {
+    SGHBlockPerson *person = [[SGHBlockPerson alloc] init];
+    __block typeof(person) blockPerson = person;
+    person.block = ^{
+        NSLog(@"age is %ld", (long)blockPerson.age);
+        blockPerson = nil; //使用完blockPerson后，如果没有设置`blockPerson = nil;`，会出现循环引用
+    };
+    person.block();
+}
 ```
 
 ##### 4.三种方法比较
 
-- `__weak`：不会产生强引用，指向的对象销毁时，会自动让指针置为nil
-- `__unsafe_unretained`：不会产生强引用，不安全，指向的对象销毁时，指针存储的地址值不变
-- `__block`：必须把引用对象置位nil，并且要调用该block
+- `__weak`：**不会产生强引用，指向的对象销毁时，会自动让指针置为nil 。**
+- `__unsafe_unretained`：不会产生强引用，不安全，<font color=#FF0000>**指向的对象销毁时，指针存储的地址值不变**</font>。
+- `__block`：必须把引用对象置为nil，并且要调用该block。
 
 ![img](https:////upload-images.jianshu.io/upload_images/1915113-c6530ce13f306da1.png?imageMogr2/auto-orient/strip|imageView2/2/w/249)
 
@@ -676,24 +915,33 @@ __block解决循环引用方式
 
 #### Q：MRC下如何解决block循环引用的问题？
 
-两种方式：__unsafe_unretained、__block
+两种方式：`__unsafe_unretained`、`__block`
 
-##### 1.第一种方式：__unsafe_unretained
+##### 1.第一种方式：`__unsafe_unretained`
 
 ```objc
-__unsafe_unretained Person *person = [[Person alloc] init];
-person.block = ^{
-    NSLog(@"age is %d", weakPerson.age);
-};
+- (void)sec3demo1 {
+    SGHBlockPerson *person = [[[SGHBlockPerson alloc] init] autorelease];
+    __unsafe_unretained  typeof(person) tPerson = person;
+    person.block = ^{
+        NSLog(@"age is %ld", (long)tPerson.age);
+    };
+    person.block();
+}
 ```
 
-##### 2.第二种方式：__block
+##### 2.第二种方式：`__block`
 
 ```objc
-__block Person *person = [[Person alloc] init];
-person.block = ^{
-    NSLog(@"age is %d", person.age);
-};
+- (void)sec3demo2 {
+    SGHBlockPerson *person = [[[SGHBlockPerson alloc] init] autorelease];
+    __block typeof(person) blockPerson = person;
+    person.block = ^{
+        NSLog(@"age is %ld", (long)blockPerson.age);
+        blockPerson = nil; //使用完blockPerson后，如果没有设置`blockPerson = nil;`，会出现循环引用
+    };
+    person.block();
+}
 ```
 
 

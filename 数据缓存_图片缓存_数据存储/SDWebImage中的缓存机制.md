@@ -9,13 +9,13 @@
 
 ### 缓存步骤
 
-1. 将图片缓存在内存中
-2. 判断图片的格式是png或是jpeg，将图片转化为`NSData`数据
-3. 如果是在mac_os系统中，直接将图片转化为`NSBitmapImageRep`数据
+1. 将图片缓存在内存中；
+2. 判断图片的格式是png或是jpeg，将图片转化为`NSData`数据；
+3. 如果是在mac_os系统中，直接将图片转化为`NSBitmapImageRep`数据；
 4. 获取图片的存储路径，其中图片的文件名是通过传入的key经过md5加密后获得的。
 5. 将图片存储磁盘中
 
-```
+```objc
 //SDImageCache.m
 - (void)storeImage:(nullable UIImage *)image
          imageData:(nullable NSData *)imageData
@@ -68,13 +68,13 @@
 ### 获取图片步骤
 
 
-1. 先在内存缓存中寻找
-2. 如果内存中找不到图片，则在默认的磁盘根目录中寻找，如果还是找不到，再从自定义的只读目录路径中寻找
-3. 获取图片数据后，将图片数据从NSData转化为UIImage,转化是要根据图片的类型进行转化。
+1. 先在内存缓存中寻找；
+2. 如果内存中找不到图片，则在默认的磁盘根目录中寻找，如果还是找不到，再从自定义的只读目录路径中寻找；
+3. 获取图片数据后，将图片数据从NSData转化为UIImage，转化是要根据图片的类型进行转化。
 4. 默认对图片进行解压缩，生成位图图片。
 5. 将位图图片返回。
 
-```
+```objc
 //从内存中查找
 - (nullable UIImage *)imageFromMemoryCacheForKey:(nullable NSString *)key {
     return [self.memCache objectForKey:key];
@@ -137,7 +137,7 @@
 6. 从上下文中读取一个不透明的位图图像，该图像就是解压缩后的图像
 7. 将位图图像返回
 
-```
+```objc
 + (BOOL)shouldDecodeImage:(nullable UIImage *)image {
     // Prevent "CGBitmapContextCreateImage: invalid context 0x0" error
     if (image == nil) {
@@ -214,7 +214,7 @@
 1. 如果是普通图像，则直接进行缩放
 2. 如果是动态图像，则要对图像中的每一张图像都进行缩放
 
-```
+```objc
 inline UIImage *SDScaledImageForKey(NSString * _Nullable key, UIImage * _Nullable image) {
     if (!image) {
         return nil;
@@ -268,7 +268,7 @@ inline UIImage *SDScaledImageForKey(NSString * _Nullable key, UIImage * _Nullabl
 4. 判断剩下的文件大小是否超过用户现在的磁盘最大容量。
 5. 如果超过，则将剩余的文件进行安修改时间进行升序排列，然后删除修改时间最早的文件，直到剩余文件大小小于最大磁盘容量的一半。
 
-```
+```objc
 - (void)clearMemory {
     [self.memCache removeAllObjects];
 }
@@ -375,7 +375,7 @@ inline UIImage *SDScaledImageForKey(NSString * _Nullable key, UIImage * _Nullabl
 2. 当程序进入后台时，会对磁盘的文件数据进行清理。
 3. 当收到程序关闭通知时，会对磁盘中的文件数据进行清理。
 
-```
+```objc
         // Subscribe to app events
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(clearMemory)
@@ -404,7 +404,7 @@ inline UIImage *SDScaledImageForKey(NSString * _Nullable key, UIImage * _Nullabl
 | 0x4D\0x49  | tiff                                                         |
 | 0x52       | 将imageData的前12个字节转化为字符串，如果是RIFF前缀和WEBP后缀，则图片类型是webp |
 
-```
+```objc
 + (SDImageFormat)sd_imageFormatForImageData:(nullable NSData *)data {
     if (!data) {
         return SDImageFormatUndefined;

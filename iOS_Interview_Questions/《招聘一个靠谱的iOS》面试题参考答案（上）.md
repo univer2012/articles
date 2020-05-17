@@ -35,7 +35,7 @@ block 使用 copy 是从 MRC 遗留下来的“传统”：
 
 <font color=#038103>如果不写 copy ，该类的调用者有可能会忘记或者根本不知道”编译器会自动对 block 进行了 copy 操作”，他们有可能会在调用之前手动拷贝属性值。这种操作多余而低效。</font>你也许会感觉我这种做法有些怪异，不需要写依然写。如果你这样想，其实是你“日用而不知”，你平时开发中是经常在用我说的这种做法的，比如下面的属性不写copy也行，但是你会选择写还是不写呢？
 
- ```Objective-C
+ ```objectivec
  @property (nonatomic, copy) NSString *userId;
 
  - (instancetype)initWithUserId:(NSString *)userId {
