@@ -61,15 +61,11 @@ image.png
 
 #### 三、其他方式安装APP
 
-1. `Debug`开发App时可以直接把开发中的应用安装进手机调试；
+1. `Debug` 开发App时可以直接把开发中的应用安装进手机调试；
 
-2. `In-House`企业内部分发，可以直接安装企业证书签名后的App;
+2. `In-House` 企业内部分发，可以直接安装企业证书签名后的App;
 
-3. ```
-   AD-Hoc
-   ```
-
-   相当于企业分发的限制版，限制安装设备数量，较少用。
+3. `Ad-Hoc` 相当于企业分发的限制版，限制安装设备数量，较少用。
 
    ![img](https:////upload-images.jianshu.io/upload_images/1932148-36fed56d5a8e6691.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200)
 
