@@ -52,8 +52,7 @@ Universal Links是iOS9推出的一项功能，使你的应用可以通过传统�
 > 1. `apps`必须使空数组。
 > 2. `appID`组成是`<team identifier>` + `.` + `<bundle identifier>`，例如：`9JA89QQLNQ.com.apple.wwdc`。其中team ID可以在苹果Apple Developer -> Member Center ->Membership->Team ID中找到；bundle ID可以在工程的`Bundle Identifier`中找到。
 > 3. `paths`设定的你的app支持的路径列表，只有这些指定的路径的链接，才能被app处理。
-> 
-> 	1. 可以用`*`匹配任何子字符串，`?`匹配任何单个字符。`NOT `(`T`后面包含一个空格)作前缀开头的字符串，代表不被通用链接处理的路径。例如
+> 1. 可以用`*`匹配任何子字符串，`?`匹配任何单个字符。`NOT `(`T`后面包含一个空格)作前缀开头的字符串，代表不被通用链接处理的路径。例如
 > 	`"paths": [ "/wwdc/news/", "NOT /videos/wwdc/2010/*", "/videos/wwdc/201?/*"]`
 > 	2. `paths`数组中指定路径的字符串，区分大小写。
 
