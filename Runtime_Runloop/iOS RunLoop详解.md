@@ -186,9 +186,9 @@ typedef struct {
     CFStringRef (*copyDescription)(const void *info);
     Boolean (*equal)(const void *info1, const void *info2);
     CFHashCode  (*hash)(const void *info);
-    void    (*schedule)(void *info, CFRunLoopRef rl, CFStringRef mode);
-    void    (*cancel)(void *info, CFRunLoopRef rl, CFStringRef mode);
-    void    (*perform)(void *info);
+    void    (*schedule)(void *info, CFRunLoopRef rl, CFStringRef mode); //安排，预定
+    void    (*cancel)(void *info, CFRunLoopRef rl, CFStringRef mode); //取消
+    void    (*perform)(void *info); //执行，表演
 } CFRunLoopSourceContext;
 ```
 
@@ -206,16 +206,16 @@ typedef struct {
     Boolean (*equal)(const void *info1, const void *info2);
     CFHashCode  (*hash)(const void *info);
 #if (TARGET_OS_MAC && !(TARGET_OS_EMBEDDED || TARGET_OS_IPHONE)) || (TARGET_OS_EMBEDDED || TARGET_OS_IPHONE)
-    mach_port_t (*getPort)(void *info);
+    mach_port_t (*getPort)(void *info); //比source0 多的字段
     void *  (*perform)(void *msg, CFIndex size, CFAllocatorRef allocator, void *info);
 #else
-    void *  (*getPort)(void *info);
+    void *  (*getPort)(void *info); //比source0 多的字段
     void    (*perform)(void *info);
 #endif
 } CFRunLoopSourceContext1;
 ```
 
-Source1除了包含回调指针外，包含一个mach port，Source1可以监听系统端口和通过内核和其他线程通信，接收、分发系统事件，它能够主动唤醒RunLoop(由操作系统内核进行管理，例如CFMessagePort消息)。官方也指出可以自定义Source，因此对于CFRunLoopSourceRef来说它更像一种协议，框架已经默认定义了两种实现，如果有必要开发人员也可以自定义，详细情况可以查看官方文档。
+Source1除了包含回调指针外，包含一个mach port，Source1可以监听系统端口和通过内核和其他线程通信，接收、分发系统事件，它能够主动唤醒RunLoop(由操作系统内核进行管理，例如CFMessagePort消息)。**官方也指出可以自定义Source，因此对于CFRunLoopSourceRef来说它更像一种协议**，框架已经默认定义了两种实现，如果有必要开发人员也可以自定义，详细情况可以查看官方文档。
 
 #### CFRunLoopObserver
 
@@ -230,7 +230,7 @@ struct __CFRunLoopObserver {
     CFOptionFlags _activities;      /* immutable 不可变的 */
     CFIndex _order;         /* immutable 不可变的 */
     CFRunLoopObserverCallBack _callout; /* immutable */
-    CFRunLoopObserverContext _context;  /* immutable, except invalidation */
+    CFRunLoopObserverContext _context;  /* immutable, except invalidation 不可变的，除非失效 */
 };
 ```
 
@@ -239,13 +239,13 @@ struct __CFRunLoopObserver {
 ```c
 /* Run Loop Observer Activities */
 typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
-    kCFRunLoopEntry = (1UL << 0), //即将进入run loop
-    kCFRunLoopBeforeTimers = (1UL << 1), //即将处理timer
-    kCFRunLoopBeforeSources = (1UL << 2),//即将处理source
-    kCFRunLoopBeforeWaiting = (1UL << 5),//即将进入休眠
-    kCFRunLoopAfterWaiting = (1UL << 6),//被唤醒但是还没开始处理事件
-    kCFRunLoopExit = (1UL << 7),//run loop已经退出
-    kCFRunLoopAllActivities = 0x0FFFFFFFU
+    kCFRunLoopEntry = (1UL << 0),           //即将进入run loop
+    kCFRunLoopBeforeTimers = (1UL << 1),    //即将处理timer
+    kCFRunLoopBeforeSources = (1UL << 2),   //即将处理source
+    kCFRunLoopBeforeWaiting = (1UL << 5),   //即将进入休眠
+    kCFRunLoopAfterWaiting = (1UL << 6),    //被唤醒但是还没开始处理事件
+    kCFRunLoopExit = (1UL << 7),            //run loop已经退出
+    kCFRunLoopAllActivities = 0x0FFFFFFFU   //监听所有状态
 };
 ```
 
